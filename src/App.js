@@ -6,6 +6,10 @@ function App() {
   const [poseLandmarker, setPoseLandmarker] = useState(null);
   const [landmarks, setLandmarks] = useState(null);
 
+  const getCoordinates = () => {
+    console.log(landmarks);
+  };
+
   return (
     <div className="App">
       <CanvasLandmarks
@@ -15,12 +19,13 @@ function App() {
       />
 
       <div className="landmarks">
+        <button onClick={getCoordinates}>Get Coordinates</button>
         {landmarks &&
-          landmarks.map((item, index) => (
+          Object.keys(landmarks).map((key) => (
             <div className="coordinates">
-              <p key={index}>
-                Index: {item.index}, x: {item.x.toFixed(3)}, y:
-                {item.y.toFixed(3)}
+              <p key={key}>
+                Index: {key}, x: {landmarks[key].x.toFixed(3)}, y:
+                {landmarks[key].y.toFixed(3)}
               </p>
             </div>
           ))}

@@ -5,6 +5,8 @@ import {
   DrawingUtils,
 } from "@mediapipe/tasks-vision";
 import Webcam from "react-webcam";
+import { buildSquares } from "./detection";
+import tpose from "./poses/tpose.json";
 
 const CanvasLandmarks = ({
   poseLandmarker,
@@ -40,34 +42,74 @@ const CanvasLandmarks = ({
               canvasElement.width,
               canvasElement.height
             );
-            let newLandmarks = [];
+
+            // draw a line in the middle of the canvas
+            canvasCtx.beginPath();
+            canvasCtx.moveTo(canvasElement.width / 2, 0);
+            canvasCtx.lineTo(canvasElement.width / 2, canvasElement.height);
+            canvasCtx.strokeStyle = "red";
+            canvasCtx.stroke();
+            canvasCtx.closePath();
+            canvasCtx.beginPath();
+            canvasCtx.moveTo(0, canvasElement.height / 2);
+            canvasCtx.lineTo(canvasElement.width, canvasElement.height / 2);
+            canvasCtx.stroke();
+            canvasCtx.closePath();
+
+            let newLandmarks = {};
             for (const landmark of result.landmarks) {
+              // create new filtered landmarks
               for (let i = 0; i < landmark.length; i++) {
                 if (idPoses.includes(i)) {
-                  newLandmarks.push({
-                    index: i,
+                  newLandmarks[i] = {
                     x: landmark[i].x,
                     y: landmark[i].y,
-                  });
+                  };
                 }
               }
-
-              // draw a circle in each point of newLandmarks
-
-              // drawingUtils.drawLandmarks(landmark, {
-              //   radius: (data) =>
-              //     DrawingUtils.lerp(data.from.z, -0.15, 0.1, 5, 1),
+              // drawingUtils.drawConnectors(
+              //   landmark,
+              //   PoseLandmarker.POSE_CONNECTIONS
+              // );
+              // drawingUtils.drawLandmarks(newLandmarks, {
+              //   color: "red",
+              //   fillColor: "red",
+              //   radius: 3,
               // });
-              drawingUtils.drawConnectors(
-                landmark,
-                PoseLandmarker.POSE_CONNECTIONS
-              );
-              drawingUtils.drawLandmarks(newLandmarks, {
-                color: "red",
-                fillColor: "red",
-                radius: 3,
-              });
+
+              const squares = buildSquares(newLandmarks);
+              // console.log(squares);
+              for (let i = 0; i < squares.length; i++) {
+                let square = squares[i];
+                canvasCtx.beginPath();
+                canvasCtx.lineWidth = "1";
+                canvasCtx.rect(
+                  square.x * canvasElement.width,
+                  square.y * canvasElement.height,
+                  square.side * canvasElement.width,
+                  square.side * canvasElement.height
+                );
+                canvasCtx.strokeStyle = "red";
+                canvasCtx.stroke();
+              }
             }
+
+            // draw rect of tpose
+            const squareSide = 0.08;
+            for (const [key, value] of Object.entries(tpose)) {
+              canvasCtx.beginPath();
+              canvasCtx.lineWidth = "1";
+
+              canvasCtx.rect(
+                value.x * canvasElement.width,
+                value.y * canvasElement.height,
+                squareSide * canvasElement.width,
+                squareSide * canvasElement.height
+              );
+              canvasCtx.strokeStyle = "blue";
+              canvasCtx.stroke();
+            }
+
             canvasCtx.restore();
             setLandmarks(newLandmarks);
           });
@@ -93,9 +135,7 @@ const CanvasLandmarks = ({
         },
         runningMode: "VIDEO",
       });
-      console.log(poseLandmarker);
       setPoseLandmarker(poseLandmarker);
-      console.log("loaded");
     }
 
     initPoseLandmarker();
