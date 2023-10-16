@@ -20,6 +20,7 @@ const CanvasLandmarks = ({
     const canvasElement = canvasRef.current;
     const canvasCtx = canvasRef.current.getContext("2d");
     const drawingUtils = new DrawingUtils(canvasCtx);
+    const idPoses = [0, 11, 12, 13, 14, 19, 20, 23, 24, 25, 26, 27, 28];
 
     const draw = () => {
       if (webcamRef.current === null) return;
@@ -39,19 +40,36 @@ const CanvasLandmarks = ({
               canvasElement.width,
               canvasElement.height
             );
+            let newLandmarks = [];
             for (const landmark of result.landmarks) {
-              drawingUtils.drawLandmarks(landmark, {
-                radius: (data) =>
-                  DrawingUtils.lerp(data.from.z, -0.15, 0.1, 5, 1),
-              });
+              for (let i = 0; i < landmark.length; i++) {
+                if (idPoses.includes(i)) {
+                  newLandmarks.push({
+                    index: i,
+                    x: landmark[i].x,
+                    y: landmark[i].y,
+                  });
+                }
+              }
+
+              // draw a circle in each point of newLandmarks
+
+              // drawingUtils.drawLandmarks(landmark, {
+              //   radius: (data) =>
+              //     DrawingUtils.lerp(data.from.z, -0.15, 0.1, 5, 1),
+              // });
               drawingUtils.drawConnectors(
                 landmark,
                 PoseLandmarker.POSE_CONNECTIONS
               );
+              drawingUtils.drawLandmarks(newLandmarks, {
+                color: "red",
+                fillColor: "red",
+                radius: 3,
+              });
             }
             canvasCtx.restore();
-            console.log(result.landmarks[0]);
-            setLandmarks(result.landmarks[0]);
+            setLandmarks(newLandmarks);
           });
         }
       }
