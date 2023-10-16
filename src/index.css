@@ -24,10 +24,9 @@ canvas {
 }
 
 .container {
-  position: relative;
-  clear: both;
   width: 640px;
   height: 480px;
+  padding: 10px;
 }
 
 button {
@@ -35,4 +34,12 @@ button {
   bottom: 0;
   right: 0;
   z-index: 10;
+}
+
+.container-video {
+  position: relative;
+}
+
+.coordinates {
+  border: 1px solid black;
 }

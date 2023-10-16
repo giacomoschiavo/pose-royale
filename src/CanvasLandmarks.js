@@ -6,7 +6,11 @@ import {
 } from "@mediapipe/tasks-vision";
 import Webcam from "react-webcam";
 
-const CanvasLandmarks = ({ poseLandmarker, setPoseLandmarker }) => {
+const CanvasLandmarks = ({
+  poseLandmarker,
+  setPoseLandmarker,
+  setLandmarks,
+}) => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [loading, setLoading] = useState(true);
@@ -46,6 +50,8 @@ const CanvasLandmarks = ({ poseLandmarker, setPoseLandmarker }) => {
               );
             }
             canvasCtx.restore();
+            console.log(result.landmarks[0]);
+            setLandmarks(result.landmarks[0]);
           });
         }
       }
@@ -53,7 +59,7 @@ const CanvasLandmarks = ({ poseLandmarker, setPoseLandmarker }) => {
     };
 
     draw();
-  }, [poseLandmarker, loading]);
+  }, [poseLandmarker, loading, setLandmarks]);
 
   useEffect(() => {
     async function initPoseLandmarker() {
@@ -69,7 +75,7 @@ const CanvasLandmarks = ({ poseLandmarker, setPoseLandmarker }) => {
         },
         runningMode: "VIDEO",
       });
-
+      console.log(poseLandmarker);
       setPoseLandmarker(poseLandmarker);
       console.log("loaded");
     }
@@ -78,13 +84,13 @@ const CanvasLandmarks = ({ poseLandmarker, setPoseLandmarker }) => {
   }, []);
 
   return (
-    <>
-      <div>
+    <div className="container">
+      <div className="container-video">
         <Webcam ref={webcamRef} />
         <canvas ref={canvasRef} />
       </div>
       <button onClick={() => setLoading(false)}>Load Skeleton</button>
-    </>
+    </div>
   );
 };
 
