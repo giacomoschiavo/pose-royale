@@ -1,4 +1,7 @@
 .App {
+  display: flex;
+  flex-direction: row;
+  /* height: 100vh; */
 }
 
 video {
@@ -22,6 +25,14 @@ canvas {
 
 .container {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  clear: both;
+  width: 640px;
+  height: 480px;
+}
+
+button {
+  position: relative;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
 }

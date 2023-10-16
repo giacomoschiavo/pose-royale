@@ -6,10 +6,9 @@ import {
 } from "@mediapipe/tasks-vision";
 import Webcam from "react-webcam";
 
-const Canvas = () => {
+const CanvasLandmarks = ({ poseLandmarker, setPoseLandmarker }) => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
-  const [poseLandmarker, setPoseLandmarker] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -89,4 +88,4 @@ const Canvas = () => {
   );
 };
 
-export default Canvas;
+export default CanvasLandmarks;

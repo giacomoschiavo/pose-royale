@@ -1,10 +1,16 @@
 import "./App.css";
-import Canvas from "./Canvas";
+import { useState } from "react";
+import CanvasLandmarks from "./CanvasLandmarks";
 
 function App() {
+  const [poseLandmarker, setPoseLandmarker] = useState(null);
+
   return (
     <div className="App">
-      <Canvas />
+      <CanvasLandmarks
+        poseLandmarker={poseLandmarker}
+        setPoseLandmarker={setPoseLandmarker}
+      />
     </div>
   );
 }
