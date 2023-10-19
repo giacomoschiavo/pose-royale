@@ -6,8 +6,10 @@ import {
   filterLandmarks,
   initPoseLandmarker,
   drawSquares,
+  detectPoses,
 } from "./detection";
 import tpose from "./poses/tpose.json";
+import imageTpose from "./poses/TPose.png";
 
 const CanvasLandmarks = ({
   poseLandmarker,
@@ -35,6 +37,7 @@ const CanvasLandmarks = ({
         if (video.currentTime !== lastVideoTime) {
           poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
             canvasCtx.save();
+            // draw image
             canvasCtx.clearRect(
               0,
               0,
@@ -42,9 +45,18 @@ const CanvasLandmarks = ({
               canvasElement.height
             );
 
+            // const img = new Image();
+            // img.src = imageTpose;
+            // canvasCtx.drawImage(
+            //   img,
+            //   0,
+            //   0,
+            //   canvasElement.width,
+            //   canvasElement.height
+            // );
             drawGuidelines(canvasElement, canvasCtx);
 
-            // pick only chosen ids
+            // // pick only chosen ids
             const idPoses = [0, 11, 12, 13, 14, 19, 20, 23, 24, 25, 26, 27, 28];
             let newLandmarks = filterLandmarks(result.landmarks, idPoses);
 
@@ -53,7 +65,7 @@ const CanvasLandmarks = ({
             // draw squares of the skeleton
             drawSquares(canvasElement, canvasCtx, squares, squareSide, "red");
 
-            // draw squares of the pose (tpose)
+            // // draw squares of the pose (tpose)
             drawSquares(
               canvasElement,
               canvasCtx,
@@ -63,6 +75,8 @@ const CanvasLandmarks = ({
             );
 
             canvasCtx.restore();
+            const passed = detectPoses(squares, Object.values(tpose));
+            console.log(passed);
             setLandmarks(newLandmarks);
           });
         }

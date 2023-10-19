@@ -19,7 +19,7 @@ export const detectPoses = (squares, actualLandMarks) => {
     if (
       !(
         landMark.x > square.x &&
-        landMark.x + square.side &&
+        landMark.x < square.x + square.side &&
         landMark.y > square.y &&
         landMark.y < square.y + square.side
       )
