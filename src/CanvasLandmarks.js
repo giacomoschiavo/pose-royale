@@ -52,7 +52,13 @@ const CanvasLandmarks = ({
             canvasCtx.closePath();
             canvasCtx.beginPath();
             canvasCtx.moveTo(0, canvasElement.height / 2);
-            canvasCtx.lineTo(canvasElement.width, canvasElement.height / 2);
+            canvasCtx.lineTo(canvasElement.width, canvasElement.height/2);
+            canvasCtx.stroke();
+            canvasCtx.closePath();
+            canvasCtx.beginPath();
+            canvasCtx.moveTo(0, canvasElement.height*0.9);
+            canvasCtx.lineTo(canvasElement.width, canvasElement.height*0.9);
+            canvasCtx.strokeStyle = "red";
             canvasCtx.stroke();
             canvasCtx.closePath();
 
