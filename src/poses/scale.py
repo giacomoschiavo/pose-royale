@@ -16,6 +16,7 @@ with open(input_file, "r") as f:
 for pose in data:
   for coord, dim in zip(["x", "y"], [width, height]):
     data[pose][coord] *= dim
+    data[pose][coord] = int(data[pose][coord])
 
 # Save the updated JSON file to a new file
 with open(output_file, "w") as f:
