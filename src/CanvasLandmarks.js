@@ -102,21 +102,21 @@ const CanvasLandmarks = ({
 
             // draw rect of tpose
             const squareSide = 0.08;
-            // for (const [key, value] of Object.entries(tpose)) {
-            //   canvasCtx.beginPath();
-            //   canvasCtx.lineWidth = "1";
+            for (const [key, value] of Object.entries(tpose)) {
+              canvasCtx.beginPath();
+              canvasCtx.lineWidth = "1";
 
-            //   canvasCtx.rect(
-            //     value.x * canvasElement.width,
-            //     value.y * canvasElement.height,
-            //     squareSide * canvasElement.width,
-            //     squareSide * canvasElement.height
-            //   );
-            //   canvasCtx.strokeStyle = "blue";
-            //   canvasCtx.stroke();
-            // }
+              canvasCtx.rect(
+                value.x * canvasElement.width,
+                value.y * canvasElement.height,
+                squareSide * canvasElement.width,
+                squareSide * canvasElement.height
+              );
+              canvasCtx.strokeStyle = "blue";
+              canvasCtx.stroke();
+            }
 
-            // canvasCtx.restore();
+            canvasCtx.restore();
             setLandmarks(newLandmarks);
           });
         }

@@ -22,12 +22,12 @@ function App() {
         <button onClick={getCoordinates}>Get Coordinates</button>
         {landmarks &&
           Object.keys(landmarks).map((key) => (
-            <div className="coordinates">
-              <p key={key}>
+            <ul className="coordinates">
+              <li key={key}>
                 Index: {key}, x: {landmarks[key].x.toFixed(3)}, y:
                 {landmarks[key].y.toFixed(3)}
-              </p>
-            </div>
+              </li>
+            </ul>
           ))}
       </div>
     </div>
