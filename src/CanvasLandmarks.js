@@ -42,17 +42,17 @@ const CanvasLandmarks = ({
           canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
           // load background image pose
-          const img = new Image();
-          img.src = imageTpose;
-          canvasCtx.globalAlpha = 0.4;
-          canvasCtx.drawImage(
-            img,
-            0,
-            0,
-            canvasElement.width,
-            canvasElement.height
-          );
-          canvasCtx.globalAlpha = 1;
+          // const img = new Image();
+          // img.src = imageTpose;
+          // canvasCtx.globalAlpha = 0.4;
+          // canvasCtx.drawImage(
+          //   img,
+          //   0,
+          //   0,
+          //   canvasElement.width,
+          //   canvasElement.height
+          // );
+          // canvasCtx.globalAlpha = 1;
 
           // draw matrix on screen
           drawGuidelines(canvasElement, canvasCtx);
@@ -70,11 +70,10 @@ const CanvasLandmarks = ({
             drawSquares(canvasElement, canvasCtx, skeleton, squareSide, "red");
 
             // // draw squares of the pose (tpose)
-            drawSquares(canvasElement, canvasCtx, tpose, squareSide, "blue");
+            // drawSquares(canvasElement, canvasCtx, tpose, squareSide, "blue");
 
             canvasCtx.restore();
             const passed = detectPose2(tpose, skeleton, squareSide);
-            console.log(passed);
           });
         }
       }

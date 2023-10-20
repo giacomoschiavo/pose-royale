@@ -37,9 +37,11 @@ export const detectPoses = (poseLandmarks, actualLandMarks) => {
 };
 
 export const detectPose2 = (poseLandmarks, skeletonLandMarks, squareSide) => {
+  if (skeletonLandMarks.length === 0) return false;
   return Object.keys(poseLandmarks).every((key) => {
     const pose = poseLandmarks[key];
     const actual = skeletonLandMarks[key];
+    if (!actual) return false;
     // console.log(
     //   key,
     //   Math.abs(pose.x - actual.x) < squareSide / 2 &&
