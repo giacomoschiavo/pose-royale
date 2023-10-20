@@ -1,33 +1,55 @@
 import { PoseLandmarker, FilesetResolver } from "@mediapipe/tasks-vision";
 
 export const buildSquares = (landMarks, squareSide) => {
-  const squares = [];
+  const squares = {};
   for (const [key, value] of Object.entries(landMarks)) {
-    squares.push({
-      index: key,
+    squares[key] = {
       x: value.x,
       y: value.y,
       side: squareSide,
-    });
+    };
   }
   return squares;
 };
 
-export const detectPoses = (squares, actualLandMarks) => {
+export const detectPoses = (poseLandmarks, actualLandMarks) => {
+  let flag = true;
+  // console.log(poseLandmarks);
+  // console.log(actualLandMarks);
   actualLandMarks.forEach((landMark) => {
-    let square = squares.filter((s) => s.index === landMark.index);
+    let square = poseLandmarks.filter((square) => {
+      console.log(square[0], landMark.index);
+      return square[0] === landMark.index;
+    })[1];
+
     if (
       !(
-        landMark.x > square.x &&
-        landMark.x < square.x + square.side &&
-        landMark.y > square.y &&
-        landMark.y < square.y + square.side
+        Math.abs(square.x - landMark.x) < square.side / 2 &&
+        Math.abs(square.y - landMark.y) < square.side / 2
       )
     ) {
-      return false;
+      flag = false;
+      return;
     }
   });
-  return true;
+
+  return flag;
+};
+
+export const detectPose2 = (poseLandmarks, skeletonLandMarks, squareSide) => {
+  return Object.keys(poseLandmarks).every((key) => {
+    const pose = poseLandmarks[key];
+    const actual = skeletonLandMarks[key];
+    // console.log(
+    //   key,
+    //   Math.abs(pose.x - actual.x) < squareSide / 2 &&
+    //     Math.abs(pose.y - actual.y) < squareSide / 2
+    // );
+    return (
+      Math.abs(pose.x - actual.x) < squareSide / 2 &&
+      Math.abs(pose.y - actual.y) < squareSide / 2
+    );
+  });
 };
 
 export const drawSquares = (
@@ -37,8 +59,7 @@ export const drawSquares = (
   squareSide,
   color = "red"
 ) => {
-  for (let i = 0; i < squares.length; i++) {
-    let square = squares[i];
+  Object.values(squares).forEach((square) => {
     canvasCtx.beginPath();
     canvasCtx.lineWidth = "1";
     canvasCtx.rect(
@@ -49,7 +70,7 @@ export const drawSquares = (
     );
     canvasCtx.strokeStyle = color;
     canvasCtx.stroke();
-  }
+  });
 };
 
 export const drawGuidelines = (canvasElement, canvasCtx) => {
@@ -75,6 +96,7 @@ export const drawGuidelines = (canvasElement, canvasCtx) => {
 
 export const filterLandmarks = (landmarks, idPoses) => {
   let newLandmarks = {};
+  // da sistemare
   for (const landmark of landmarks) {
     // create new filtered landmarks
     for (let i = 0; i < landmark.length; i++) {
