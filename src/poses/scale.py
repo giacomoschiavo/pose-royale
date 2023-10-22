@@ -1,8 +1,8 @@
 import json
 
 # Define the input and output file paths
-input_file = "tpose.json"
-output_file = "tpose_scaled.json"
+input_file = "/Users/giacomosanguin/Documents/poseroyal/pose-royale/src/poses/wpose.json"
+output_file = "/Users/giacomosanguin/Documents/poseroyal/pose-royale/src/poses/wpose_scaled.json"
 
 # Define the width and height values
 width = 640
