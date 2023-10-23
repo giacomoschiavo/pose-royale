@@ -46,3 +46,10 @@ button {
   margin: 5px;
   padding: 0 10px;
 } */
+
+.detect {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  color: white;
+}

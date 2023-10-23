@@ -21,6 +21,7 @@ const CanvasLandmarks = ({
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [loading, setLoading] = useState(true);
+  const [detect, setDetect] = useState(false);
 
   useEffect(() => {
     // draw video on canvas
@@ -43,20 +44,20 @@ const CanvasLandmarks = ({
           canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
           // load background image pose
-          // const img = new Image();
-          // img.src = imageTpose;
-          // canvasCtx.globalAlpha = 0.4;
-          // canvasCtx.drawImage(
-          //   img,
-          //   0,
-          //   0,
-          //   canvasElement.width,
-          //   canvasElement.height
-          // );
-          // canvasCtx.globalAlpha = 1;
+          const img = new Image();
+          img.src = imageTpose;
+          canvasCtx.globalAlpha = 0.4;
+          canvasCtx.drawImage(
+            img,
+            0,
+            0,
+            canvasElement.width,
+            canvasElement.height
+          );
+          canvasCtx.globalAlpha = 1;
 
           // draw matrix on screen
-          drawGuidelines(canvasElement, canvasCtx);
+          // drawGuidelines(canvasElement, canvasCtx);
           gameController.update();
           gameController.draw(canvasElement, canvasCtx);
 
@@ -70,13 +71,14 @@ const CanvasLandmarks = ({
 
             // const squares = buildSquares(newLandmarks, squareSide);
             // draw squares of the skeleton
-            drawSquares(canvasElement, canvasCtx, skeleton, squareSide, "red");
+            // drawSquares(canvasElement, canvasCtx, skeleton, squareSide, "red");
 
             // // draw squares of the pose (tpose)
             // drawSquares(canvasElement, canvasCtx, tpose, squareSide, "blue");
 
             canvasCtx.restore();
             const passed = detectPose2(tpose, skeleton, squareSide);
+            setDetect(passed);
           });
         }
       }
@@ -99,6 +101,7 @@ const CanvasLandmarks = ({
         <canvas ref={canvasRef} />
       </div>
       <button onClick={() => setLoading(false)}>Load Skeleton</button>
+      <h1 className="detect">{detect ? "True" : "False"}</h1>
     </div>
   );
 };
