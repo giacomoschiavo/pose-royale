@@ -1,16 +1,18 @@
-class Game{
-    constructor() {
-        this.currentPose = 0;
-        this.partialScore = 0;
-    }
-    init(gameConfig){
-        this.timer = gameConfig.timer;
-        this.threshold = gameConfig.threshold;
-        this.difficulty = gameConfig.difficulty;
-        this.poses = gameConfig.poses;
-    }
-    start(){}
-    stop(){}
-    draw(){}
-    update(){}
+class Game {
+  constructor(timer, threshold, difficulty, poses, gc) {
+    this.currentPose = 0;
+    this.partialScore = 0;
+    this.timer = timer;
+    this.threshold = threshold;
+    this.difficulty = difficulty;
+    this.poses = poses;
+    this.gc = gc;
+  }
+
+  start() {}
+  stop() {}
+  draw() {}
+  update() {}
 }
+
+export { Game };

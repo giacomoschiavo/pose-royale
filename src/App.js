@@ -1,10 +1,18 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CanvasLandmarks from "./CanvasLandmarks";
+import { GameController } from "./utils/GameController";
 
 function App() {
   const [poseLandmarker, setPoseLandmarker] = useState(null);
   const [landmarks, setLandmarks] = useState(null);
+  const [gameController, setGameController] = useState(null);
+
+  useEffect(() => {
+    const gameController = new GameController();
+    gameController.init();
+    setGameController(gameController);
+  }, [setGameController]);
 
   const getCoordinates = () => {
     console.log(landmarks);
@@ -16,6 +24,7 @@ function App() {
         setLandmarks={setLandmarks}
         poseLandmarker={poseLandmarker}
         setPoseLandmarker={setPoseLandmarker}
+        gameController={gameController}
       />
 
       <div className="landmarks">

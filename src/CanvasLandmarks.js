@@ -16,6 +16,7 @@ const CanvasLandmarks = ({
   poseLandmarker,
   setPoseLandmarker,
   setLandmarks,
+  gameController,
 }) => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
@@ -56,6 +57,8 @@ const CanvasLandmarks = ({
 
           // draw matrix on screen
           drawGuidelines(canvasElement, canvasCtx);
+          gameController.update();
+          gameController.draw(canvasElement, canvasCtx);
 
           // detect poses
           poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
