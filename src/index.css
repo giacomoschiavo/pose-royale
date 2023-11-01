@@ -1,6 +1,13 @@
+body {
+  background-color: black;
+}
+
 .App {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
   /* height: 100vh; */
 }
 
@@ -12,6 +19,7 @@ video {
   height: 480px;
   clear: both;
   transform: rotateY(180deg);
+  border-radius: 5px;
 }
 
 canvas {
@@ -24,20 +32,18 @@ canvas {
 }
 
 .container {
+  position: relative;
   width: 640px;
   height: 480px;
-  padding: 10px;
+  border: 10px solid;
+  border-color: black;
+  border-radius: 10px;
+  transition: 0.5s;
 }
 
 button {
-  position: relative;
-  bottom: 0;
-  right: 0;
-  z-index: 10;
-}
-
-.container-video {
-  position: relative;
+  cursor: pointer;
+  margin: 10px;
 }
 
 /* .coordinates {

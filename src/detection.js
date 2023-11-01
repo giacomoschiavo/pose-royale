@@ -75,6 +75,28 @@ export const drawSquares = (
   });
 };
 
+export const drawCircles = (
+  canvasElement,
+  canvasCtx,
+  squares,
+  squareSide,
+  color = "red"
+) => {
+  Object.values(squares).forEach((square) => {
+    canvasCtx.beginPath();
+    canvasCtx.arc(
+      square.x * canvasElement.width,
+      square.y * canvasElement.height,
+      10,
+      0,
+      2 * Math.PI
+    );
+    canvasCtx.fillStyle = color;
+    canvasCtx.fill();
+    canvasCtx.closePath();
+  });
+};
+
 export const drawGuidelines = (canvasElement, canvasCtx) => {
   // draw a line in the middle of the canvas
   canvasCtx.beginPath();

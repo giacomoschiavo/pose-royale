@@ -8,6 +8,7 @@ import {
   drawSquares,
   detectPoses,
   detectPose2,
+  drawCircles,
 } from "./detection";
 import tpose from "./poses/tpose.json";
 import imageTpose from "./poses/TPose.png";
@@ -71,10 +72,10 @@ const CanvasLandmarks = ({
 
             // const squares = buildSquares(newLandmarks, squareSide);
             // draw squares of the skeleton
-            // drawSquares(canvasElement, canvasCtx, skeleton, squareSide, "red");
+            drawCircles(canvasElement, canvasCtx, skeleton, squareSide, "red");
 
             // // draw squares of the pose (tpose)
-            // drawSquares(canvasElement, canvasCtx, tpose, squareSide, "blue");
+            drawSquares(canvasElement, canvasCtx, tpose, squareSide, "blue");
 
             canvasCtx.restore();
             const passed = detectPose2(tpose, skeleton, squareSide);
@@ -95,14 +96,17 @@ const CanvasLandmarks = ({
   }, [setPoseLandmarker]);
 
   return (
-    <div className="container">
-      <div className="container-video">
+    <>
+      <div
+        className="container"
+        style={detect ? { "border-color": "green" } : { "border-color": "red" }}
+      >
         <Webcam ref={webcamRef} />
         <canvas ref={canvasRef} />
       </div>
       <button onClick={() => setLoading(false)}>Load Skeleton</button>
-      <h1 className="detect">{detect ? "True" : "False"}</h1>
-    </div>
+      <p>Detected: {detect ? "Yes" : "No"}</p>
+    </>
   );
 };
 
