@@ -20,6 +20,7 @@ function App() {
 
   return (
     <div className="App">
+      <h1>Pose Royale</h1>
       <CanvasLandmarks
         setLandmarks={setLandmarks}
         poseLandmarker={poseLandmarker}
@@ -27,7 +28,7 @@ function App() {
         gameController={gameController}
       />
 
-      {/* <div className="landmarks">
+      <div className="landmarks">
         <button onClick={getCoordinates}>Get Coordinates</button>
         {landmarks &&
           Object.keys(landmarks).map((key) => (
@@ -38,7 +39,7 @@ function App() {
               </li>
             </ul>
           ))}
-      </div> */}
+      </div>
     </div>
   );
 }

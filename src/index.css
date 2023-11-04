@@ -1,5 +1,5 @@
 body {
-  background-color: black;
+  background-color: #9a00d0;
 }
 
 .App {
@@ -44,6 +44,33 @@ canvas {
 button {
   cursor: pointer;
   margin: 10px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 2px solid black;
+  background-color: yellow;
+  color: red;
+  font-weight: bold;
+  font-size: 1.2rem;
+  font-family: "Comic Sans MS";
+  transform: scale(0.95);
+  transition: 0.4s;
+}
+
+button:hover {
+  /* transform: translate(2px, 2px); */
+  transform: scale(1);
+  transition: 0.4s;
+}
+
+button:active {
+  filter: invert(1);
+  transition: 0.4s;
+}
+
+.activebutton {
+  background-color: red;
+  color: yellow;
+  transform: scale(1.05);
 }
 
 /* .coordinates {
@@ -58,4 +85,21 @@ button {
   top: 0;
   left: 10%;
   color: white;
+}
+
+.test-description {
+  display: flex;
+  flex-direction: row;
+}
+
+.test-description span {
+  padding: 5px 8px;
+  border-radius: 10px;
+  font-family: "Comic Sans MS";
+  background-color: white;
+  font-weight: bold;
+}
+
+.test-description p {
+  margin: 10px 20px;
 }
