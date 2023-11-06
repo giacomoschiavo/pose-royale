@@ -20,9 +20,6 @@ const CanvasLandmarks = ({
   const canvasRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [detect, setDetect] = useState(false);
-  const [showSkeleton, setShowSkeleton] = useState(false);
-  const [showPose, setShowPose] = useState(false);
-  const [showPoseLandmarks, setShowPoseLandmarks] = useState(false);
 
   useEffect(() => {
     // draw video on canvas
@@ -30,7 +27,7 @@ const CanvasLandmarks = ({
     const canvasCtx = canvasRef.current.getContext("2d");
 
     const draw = () => {
-      if (webcamRef.current === null) return;
+      if (webcamRef.current === null || gameController == null) return;
       const video = webcamRef.current.video;
       canvasElement.width = video.videoWidth;
       canvasElement.height = video.videoHeight;
@@ -38,32 +35,30 @@ const CanvasLandmarks = ({
       let lastVideoTime = -1;
       let startTimeMs = performance.now();
       const img = new Image();
-      img.src = imageTpose;
+
       // this is triggered when "Load Skeleton" is clicked
       if (poseLandmarker && !loading) {
+        // console.log(gameController);
+        gameController.currentGame.start();
+        img.src = gameController.currentGame.currentImage;
         if (video.currentTime !== lastVideoTime) {
           canvasCtx.save();
           // clear the canvas at each iteration
           canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
           // load background image pose
-          if (showPose) {
-            canvasCtx.globalAlpha = 0.4;
-            canvasCtx.drawImage(
-              img,
-              0,
-              0,
-              canvasElement.width,
-              canvasElement.height
-            );
-            canvasCtx.globalAlpha = 1;
-          }
+          canvasCtx.globalAlpha = 0.4;
+          canvasCtx.drawImage(
+            img,
+            0,
+            0,
+            canvasElement.width,
+            canvasElement.height
+          );
+          canvasCtx.globalAlpha = 1;
 
           // draw matrix on screen
           // drawGuidelines(canvasElement, canvasCtx);
-          gameController.update();
-          gameController.draw(canvasElement, canvasCtx);
-
           // detect poses
           poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
             // // pick only chosen ids
@@ -74,22 +69,33 @@ const CanvasLandmarks = ({
 
             // const squares = buildSquares(newLandmarks, squareSide);
             // draw squares of the skeleton
-            if (showSkeleton)
-              drawCircles(
-                canvasElement,
-                canvasCtx,
-                skeleton,
-                squareSide,
-                "red"
-              );
+            drawCircles(
+              canvasElement,
+              canvasCtx,
+              skeleton,
+              squareSide / 2,
+              "red"
+            );
 
             // // draw squares of the pose (tpose)
-            if (showPoseLandmarks)
-              drawSquares(canvasElement, canvasCtx, tpose, squareSide, "blue");
+            drawSquares(
+              canvasElement,
+              canvasCtx,
+              gameController.currentGame.currentPose,
+              squareSide,
+              "blue"
+            );
 
             canvasCtx.restore();
-            const passed = detectPose2(tpose, skeleton, squareSide);
+            gameController.update(detect);
+            const passed = detectPose2(
+              gameController.currentGame.currentPose,
+              skeleton,
+              squareSide
+            );
             setDetect(passed);
+
+            // gameController.draw(canvasElement, canvasCtx);
           });
         }
       }
@@ -102,9 +108,8 @@ const CanvasLandmarks = ({
     loading,
     setLandmarks,
     gameController,
-    showSkeleton,
-    showPose,
-    showPoseLandmarks,
+    detect,
+    setDetect,
   ]);
 
   useEffect(() => {
@@ -127,28 +132,8 @@ const CanvasLandmarks = ({
           Load model
         </button>
       )}
-      {!loading && (
-        <div>
-          <button
-            className={showSkeleton ? "activebutton" : ""}
-            onClick={() => setShowSkeleton((prevState) => !prevState)}
-          >
-            Toggle Skeleton Landmarks
-          </button>
-          <button
-            className={showPose ? "activebutton" : ""}
-            onClick={() => setShowPose((prevState) => !prevState)}
-          >
-            Toggle Pose
-          </button>
-          <button
-            className={showPoseLandmarks ? "activebutton" : ""}
-            onClick={() => setShowPoseLandmarks((prevState) => !prevState)}
-          >
-            Toggle Pose Landmarks
-          </button>
-        </div>
-      )}
+
+      <button onClick={() => setDetect(true)}>Force Detection</button>
 
       <div className="test-description">
         <p>Model loaded? {loading ? <span>No</span> : <span>Yes</span>}</p>

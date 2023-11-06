@@ -1,18 +1,31 @@
 class Game {
-  constructor(timer, threshold, difficulty, poses, gc) {
-    this.currentPose = 0;
+  constructor(difficulty, gc) {
+    this.index = 0;
     this.partialScore = 0;
-    this.timer = timer;
-    this.threshold = threshold;
+    // this.timer = timer;
+    // this.threshold = threshold;
     this.difficulty = difficulty;
-    this.poses = poses;
     this.gc = gc;
+    this.currentImage = null;
+    this.currentPose = null;
+    this.poses = this.gc.poses;
+    this.images = this.gc.images;
   }
 
-  start() {}
+  start() {
+    this.currentPose = this.poses[this.index];
+    this.currentImage = this.images[this.index];
+  }
   stop() {}
   draw() {}
-  update() {}
+  update(passed) {
+    if (passed) {
+      this.partialScore++;
+      this.index++;
+      this.currentPose = this.poses[this.index];
+      this.currentImage = this.images[this.index];
+    }
+  }
 }
 
 export { Game };
