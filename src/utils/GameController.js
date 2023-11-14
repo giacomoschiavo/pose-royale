@@ -22,7 +22,7 @@ class GameController {
     this.images = [];
   }
 
-  init(canvasElement, canvasCtx) {
+  init() {
     this.poses = [tpose, crab, nail, star, rightLegRaise];
     this.images = [
       tposeImage,
@@ -33,19 +33,30 @@ class GameController {
     ];
 
     this.games[0] = new Game(0, this);
+    this.games[1] = new Game(1, this);
+    this.games[2] = new Game(2, this);
     this.currentGame = this.games[this.difficulty];
+  }
 
-    // this.games[1] = new Game({ ...gameConfig.medium, poses: [], gc: this });
-    // this.games[2] = new Game({ ...gameConfig.hard, poses: [], gc: this });
+  getCurrentPose() {
+    return this.currentGame.getCurrentPose();
+  }
+
+  getCurrentImage() {
+    return this.currentGame.getCurrentImage();
+  }
+
+  getPartialTimer() {
+    return this.currentGame.timer;
   }
 
   start() {
-    this.currentGame.start();
+    this.currentGame.start(); // initialize the first pose
     this.globalTimer = 0;
   }
 
   stop() {
-    this.currentGame.stop();
+    this.currentGame.stop(); // not implemented yet
   }
 
   draw(canvasElement, canvasCtx) {
@@ -56,10 +67,17 @@ class GameController {
     this.currentGame.update(detect);
   }
 
-  changeGame() {
-    this.stop();
+  nextPose() {
+    this.currentGame.nextPose();
+  }
+
+  nextGame() {
+    if (this.difficulty === this.games.length - 1) {
+      console.log("Game Over");
+      return;
+    }
     this.currentGame = this.games[++this.difficulty];
-    this.start();
+    this.currentGame.start();
   }
 }
 

@@ -36,7 +36,7 @@ export const detectPoses = (poseLandmarks, actualLandMarks) => {
   return flag;
 };
 
-export const detectPose2 = (poseLandmarks, skeletonLandMarks, squareSide) => {
+export const detectPose = (poseLandmarks, skeletonLandMarks, squareSide) => {
   if (skeletonLandMarks.length === 0) return false;
   return Object.keys(poseLandmarks).every((key) => {
     const pose = poseLandmarks[key];
@@ -151,4 +151,17 @@ export const initPoseLandmarker = async (callback) => {
   });
 
   callback(poseLandmarker);
+};
+
+export const drawMovingImage = (canvasElement, ctx, image, seconds) => {
+  const zoomFactor = 1 + (10 - seconds) / 10;
+  const imageWidth = image.width * zoomFactor;
+  const imageHeight = image.height * zoomFactor;
+
+  const x = (canvasElement.width - imageWidth) / 2;
+  const y = (canvasElement.height - imageHeight) / 2;
+
+  ctx.globalAlpha = 0.5;
+  ctx.drawImage(image, x, y, imageWidth, imageHeight);
+  ctx.globalAlpha = 1;
 };
