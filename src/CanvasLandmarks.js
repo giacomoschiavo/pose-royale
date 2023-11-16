@@ -6,10 +6,10 @@ import {
   drawSquares,
   detectPose,
   drawCircles,
-  drawMovingImage,
+  drawGuidelines,
 } from "./detection";
-import tpose from "./poses/tpose.json";
-import imageTpose from "./poses/TPose.png";
+import styles from "./CanvasLandmarks.module.css";
+import tposeImage from "./poses/TPose.png";
 
 const CanvasLandmarks = ({
   poseLandmarker,
@@ -19,6 +19,7 @@ const CanvasLandmarks = ({
 }) => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
+  const imgRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [detect, setDetect] = useState(false);
   const [score, setScore] = useState(0);
@@ -27,14 +28,7 @@ const CanvasLandmarks = ({
   useEffect(() => {
     if (loading) return;
     const timer = setInterval(() => {
-      setSeconds((prevSeconds) => {
-        // Quando il timer raggiunge 0, reimposta il timer a 10 secondi
-        if (prevSeconds === 0) {
-          clearInterval(timer); // Pulisci il timer corrente
-          return 10; // Riavvia il timer
-        }
-        return prevSeconds - 1;
-      });
+      setSeconds((prevSeconds) => prevSeconds - 1);
     }, 1000);
 
     // Pulisci il timer quando il componente viene smontato
@@ -66,23 +60,22 @@ const CanvasLandmarks = ({
 
       let lastVideoTime = -1;
       let startTimeMs = performance.now();
-      const backgroundImage = new Image();
 
       // this is triggered when "Load Skeleton" is clicked
       if (poseLandmarker && !loading) {
         // console.log(gameController);
         gameController.start();
-        backgroundImage.src = gameController.getCurrentImage();
+        // imgRef.current.src = gameController.getCurrentImage();
+        // draw matrix on screen (only for posing)
+        canvasCtx.save();
+        // clear the canvas at each iteration
+        canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+        // load background image pose
+
+        // drawMovingImage(canvasElement, canvasCtx, backgroundImage, seconds);
+
         if (video.currentTime !== lastVideoTime) {
-          canvasCtx.save();
-          // clear the canvas at each iteration
-          canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-
-          // load background image pose
-          drawMovingImage(canvasElement, canvasCtx, backgroundImage, seconds);
-
-          // draw matrix on screen (only for posing)
-          // drawGuidelines(canvasElement, canvasCtx);
+          drawGuidelines(canvasElement, canvasCtx);
 
           // detect poses
           poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
@@ -104,14 +97,14 @@ const CanvasLandmarks = ({
             );
 
             // draw squares of the pose (tpose)
-            drawSquares(
-              canvasElement,
-              canvasCtx,
-              gameController.getCurrentPose(),
-              squareSide,
-              "blue"
-            );
-            canvasCtx.restore();
+            // drawSquares(
+            //   canvasElement,
+            //   canvasCtx,
+            //   gameController.getCurrentPose(),
+            //   squareSide,
+            //   "blue"
+            // );
+            // canvasCtx.restore();
 
             // detect if the pose is correct
             const passed = detectPose(
@@ -155,14 +148,21 @@ const CanvasLandmarks = ({
       >
         <Webcam ref={webcamRef} />
         <canvas ref={canvasRef} />
-        <p className="score-label">
+        <img
+          ref={imgRef}
+          className={`${loading ? "" : styles.zoomIn} ${
+            loading ? "" : styles.poseImage
+          }`}
+          src={tposeImage}
+        />
+        <p className={styles.scoreLabel}>
           Score: {score}, Timer: {seconds}
         </p>
       </div>
       <div>
         {loading && (
           <button className={{}} onClick={() => setLoading(false)}>
-            Load model
+            Start
           </button>
         )}
 

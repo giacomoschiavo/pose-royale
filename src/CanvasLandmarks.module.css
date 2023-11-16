@@ -1,0 +1,35 @@
+.poseImage {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  opacity: 0.5;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: translate(-50%, -50%) scale(0.1);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1); /* Adjust the scaling factor according to your needs */
+  }
+}
+
+.zoomIn {
+  animation-name: zoomIn;
+  animation-duration: 10s;
+  animation-fill-mode: forwards;
+}
+
+.scoreLabel {
+  position: absolute;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: "Comic Sans MS";
+  color: white;
+  z-index: 1;
+  margin: 10px;
+  top: 0;
+}
