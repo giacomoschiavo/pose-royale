@@ -1,8 +1,8 @@
 import json
 
 # Define the input and output file paths
-input_file = "/Users/giacomosanguin/Documents/poseroyal/pose-royale-1/src/poses/InclineRight.json"
-output_file = "/Users/giacomosanguin/Documents/poseroyal/pose-royale-1/src/poses/InclineRight_scaled.json"
+input_file = "D:\Progetti\pose-royale\src\poses\OPose.json"
+output_file = "D:\Progetti\pose-royale\src\poses\OPose_scaled.json"
 
 # Define the width and height values
 width = 640
@@ -17,7 +17,3 @@ for pose in data:
   for coord, dim in zip(["x", "y"], [width, height]):
     data[pose][coord] *= dim
     data[pose][coord] = int(data[pose][coord])
-
-# Save the updated JSON file to a new file
-with open(output_file, "w") as f:
-  json.dump(data, f)
