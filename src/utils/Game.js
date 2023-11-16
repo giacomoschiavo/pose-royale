@@ -1,19 +1,18 @@
 class Game {
-  constructor(difficulty, gc) {
+  constructor(difficulty, durationTimer, gc) {
     this.index = 0;
-    this.partialScore = 0;
-    this.timer = 5;
-    // this.threshold = threshold;
+    this.durationTimer = durationTimer;
     this.difficulty = difficulty;
-    this.gc = gc;
     this.currentImage = null;
     this.currentPose = null;
     // only for testing
+    this.gc = gc;
     this.poses = this.gc.poses;
     this.images = this.gc.images;
   }
 
   start() {
+    this.index = 0;
     this.currentPose = this.poses[this.index];
     this.currentImage = this.images[this.index];
   }

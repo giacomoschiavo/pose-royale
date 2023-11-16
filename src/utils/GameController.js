@@ -32,9 +32,9 @@ class GameController {
       rightLegRaiseImage,
     ];
 
-    this.games[0] = new Game(0, this);
-    this.games[1] = new Game(1, this);
-    this.games[2] = new Game(2, this);
+    this.games[0] = new Game(0, 10, this);
+    this.games[1] = new Game(1, 8, this);
+    this.games[2] = new Game(2, 5, this);
     this.currentGame = this.games[this.difficulty];
   }
 
@@ -46,8 +46,8 @@ class GameController {
     return this.currentGame.getCurrentImage();
   }
 
-  getPartialTimer() {
-    return this.currentGame.timer;
+  getDurationTimer() {
+    return this.currentGame.durationTimer;
   }
 
   start() {

@@ -23,29 +23,61 @@ const CanvasLandmarks = ({
   const [loading, setLoading] = useState(true);
   const [detect, setDetect] = useState(false);
   const [score, setScore] = useState(0);
-  const [seconds, setSeconds] = useState(10);
+  const [timer, setTimer] = useState(0);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [poseImage, setPoseImage] = useState("");
+  const [toCheck, setToCheck] = useState(false);
+  const [isGameInitialized, setIsGameInitialized] = useState(false);
+  const [animClasses, setAnimClasses] = useState(false);
 
   useEffect(() => {
-    if (loading) return;
+    if (!gameStarted) return;
     const timer = setInterval(() => {
-      setSeconds((prevSeconds) => prevSeconds - 1);
+      setTimer((prevTimer) => {
+        if (prevTimer === 0) {
+          setToCheck(true);
+          prevTimer = duration + 1;
+        }
+        return prevTimer - 1;
+      });
     }, 1000);
 
-    // Pulisci il timer quando il componente viene smontato
     return () => clearInterval(timer);
-  }, [loading]); // Aggiungi loading come dipendenza
+  }, [gameStarted, duration]);
+
+  const handleDetection = () => {};
 
   useEffect(() => {
-    if (seconds === 0) {
-      // Azioni da eseguire quando il timer raggiunge 0
-      console.log("Timer scaduto!");
-    }
-  }, [seconds]);
-
-  const handleDetection = () => {
+    if (!toCheck) return;
+    setToCheck(false);
     gameController.nextPose();
+    setDuration(gameController.getDurationTimer());
+    setPoseImage(gameController.getCurrentImage());
+    setTimer(gameController.getDurationTimer() + 1);
+    setAnimClasses(false);
+    imgRef.current.src = gameController.getCurrentImage();
     setScore((prev) => prev + 1);
-  };
+  }, [toCheck, gameController]);
+
+  useEffect(() => {
+    if (poseLandmarker && !loading) {
+      setGameStarted(true);
+    }
+  }, [poseLandmarker, loading]);
+
+  useEffect(() => {
+    if (gameStarted && !isGameInitialized) {
+      // console.log(gameController);
+      gameController.start();
+      setDuration(gameController.getDurationTimer());
+      setPoseImage(gameController.getCurrentImage());
+      setTimer(gameController.getDurationTimer());
+      imgRef.current.src = gameController.getCurrentImage();
+      setAnimClasses(true);
+      setIsGameInitialized(true);
+    }
+  }, [gameStarted, gameController, isGameInitialized]);
 
   useEffect(() => {
     // draw video on canvas
@@ -61,18 +93,11 @@ const CanvasLandmarks = ({
       let lastVideoTime = -1;
       let startTimeMs = performance.now();
 
-      // this is triggered when "Load Skeleton" is clicked
-      if (poseLandmarker && !loading) {
-        // console.log(gameController);
-        gameController.start();
-        // imgRef.current.src = gameController.getCurrentImage();
+      if (gameStarted && isGameInitialized) {
         // draw matrix on screen (only for posing)
         canvasCtx.save();
         // clear the canvas at each iteration
         canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-        // load background image pose
-
-        // drawMovingImage(canvasElement, canvasCtx, backgroundImage, seconds);
 
         if (video.currentTime !== lastVideoTime) {
           drawGuidelines(canvasElement, canvasCtx);
@@ -125,9 +150,13 @@ const CanvasLandmarks = ({
     loading,
     setLandmarks,
     gameController,
+    gameStarted,
     detect,
     setDetect,
-    seconds,
+    setDuration,
+    setPoseImage,
+    timer,
+    isGameInitialized,
   ]);
 
   useEffect(() => {
@@ -150,13 +179,13 @@ const CanvasLandmarks = ({
         <canvas ref={canvasRef} />
         <img
           ref={imgRef}
-          className={`${loading ? "" : styles.zoomIn} ${
-            loading ? "" : styles.poseImage
+          className={`${gameStarted && styles.poseImage} ${
+            gameStarted && styles.zoomIn
           }`}
-          src={tposeImage}
+          src={poseImage}
         />
         <p className={styles.scoreLabel}>
-          Score: {score}, Timer: {seconds}
+          Score: {score}, Timer: {timer}
         </p>
       </div>
       <div>
