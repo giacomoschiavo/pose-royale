@@ -6,6 +6,7 @@ import {
   drawSquares,
   detectPose,
   drawCircles,
+  drawGuidelines,
 } from "./detection";
 import styles from "./CanvasLandmarks.module.css";
 import tposeImage from "./poses/TPose.png";
@@ -27,10 +28,7 @@ const CanvasLandmarks = ({
   useEffect(() => {
     if (loading) return;
     const timer = setInterval(() => {
-      setSeconds((prevSeconds) => {
-        console.log(prevSeconds);
-        return prevSeconds - 1;
-      });
+      setSeconds((prevSeconds) => prevSeconds - 1);
     }, 1000);
 
     // Pulisci il timer quando il componente viene smontato
@@ -77,7 +75,7 @@ const CanvasLandmarks = ({
         // drawMovingImage(canvasElement, canvasCtx, backgroundImage, seconds);
 
         if (video.currentTime !== lastVideoTime) {
-          // drawGuidelines(canvasElement, canvasCtx);
+          drawGuidelines(canvasElement, canvasCtx);
 
           // detect poses
           poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
@@ -99,14 +97,14 @@ const CanvasLandmarks = ({
             );
 
             // draw squares of the pose (tpose)
-            drawSquares(
-              canvasElement,
-              canvasCtx,
-              gameController.getCurrentPose(),
-              squareSide,
-              "blue"
-            );
-            canvasCtx.restore();
+            // drawSquares(
+            //   canvasElement,
+            //   canvasCtx,
+            //   gameController.getCurrentPose(),
+            //   squareSide,
+            //   "blue"
+            // );
+            // canvasCtx.restore();
 
             // detect if the pose is correct
             const passed = detectPose(

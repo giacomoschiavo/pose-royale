@@ -29,8 +29,8 @@ function App() {
       />
 
       <div className="landmarks">
-        {/* <button onClick={getCoordinates}>Get Coordinates</button> */}
-        {/* {landmarks &&
+        <button onClick={getCoordinates}>Get Coordinates</button>
+        {landmarks &&
           Object.keys(landmarks).map((key) => (
             <ul className="coordinates">
               <li key={key}>
@@ -38,7 +38,7 @@ function App() {
                 {landmarks[key].y.toFixed(3)}
               </li>
             </ul>
-          ))} */}
+          ))}
       </div>
     </div>
   );
