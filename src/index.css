@@ -30,17 +30,6 @@ canvas {
   width: 640px;
   height: 480px;
 }
-
-.container {
-  position: relative;
-  width: 640px;
-  height: 480px;
-  border: 10px solid;
-  border-color: black;
-  border-radius: 10px;
-  transition: 0.5s;
-}
-
 button {
   cursor: pointer;
   margin: 10px;

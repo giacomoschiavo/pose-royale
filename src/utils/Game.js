@@ -1,43 +1,48 @@
+// easy: {
+//   difficulty: 0,
+//   timer: 10,
+//   threshold: 5,
+// }
+
 class Game {
-  constructor(difficulty, gc) {
-    this.index = 0;
+  constructor(difficulty, timer, threshold, gc) {
+    this.indexPose = 0;
+    this.started = false;
+    this.paused = false;
+    this.stopped = false;
     this.partialScore = 0;
-    this.timer = 5;
-    // this.threshold = threshold;
-    this.difficulty = difficulty;
+    this.timer = timer;
     this.gc = gc;
+    this.threshold = threshold;
+    this.difficulty = difficulty;
     this.currentImage = null;
     this.currentPose = null;
     // only for testing
     this.poses = this.gc.poses;
     this.images = this.gc.images;
+    this.currentPose = this.poses[this.indexPose];
+    this.currentImage = this.images[this.indexPose];
   }
 
   start() {
-    this.currentPose = this.poses[this.index];
-    this.currentImage = this.images[this.index];
+    this.started = true;
   }
-  stop() {}
-  draw() {}
-  update(passed) {
-    // if (passed) {
-    //   console.log(this.partialScore);
-    //   this.partialScore++;
-    //   this.index++;
-    //   this.currentPose = this.poses[this.index];
-    //   this.currentImage = this.images[this.index];
-    // }
+
+  pause() {
+    this.paused = true;
   }
 
   nextPose() {
-    if (this.index === this.poses.length - 1) {
+    this.indexPose++;
+    if (this.indexPose >= this.poses.length) {
+      this.indexPose = 0;
       console.log("Next Game should be called");
+      this.stopped = true;
       this.gc.nextGame();
       return;
     }
-    this.index++;
-    this.currentPose = this.poses[this.index];
-    this.currentImage = this.images[this.index];
+    this.currentPose = this.poses[this.indexPose];
+    this.currentImage = this.images[this.indexPose];
   }
 
   getCurrentPose() {

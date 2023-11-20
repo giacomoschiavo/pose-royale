@@ -11,6 +11,10 @@ import nailImage from "../poses/nailpose.png";
 import starImage from "../poses/starPose.png";
 import rightLegRaiseImage from "../poses/rightlegraise.png";
 
+// questa classe deve essere mantenuta come read only
+// nessun valore deve essere modificato
+// lo stato di tutto il gioco è regolato da GameManager
+// menntre GameController e Game fungono da struttura
 class GameController {
   constructor() {
     this.games = [null, null, null];
@@ -32,9 +36,24 @@ class GameController {
       rightLegRaiseImage,
     ];
 
-    this.games[0] = new Game(0, this);
-    this.games[1] = new Game(1, this);
-    this.games[2] = new Game(2, this);
+    this.games[0] = new Game(
+      gameConfig.easy.difficulty,
+      gameConfig.easy.timer,
+      gameConfig.easy.threshold,
+      this
+    );
+    this.games[1] = new Game(
+      gameConfig.medium.difficulty,
+      gameConfig.medium.timer,
+      gameConfig.medium.threshold,
+      this
+    );
+    this.games[2] = new Game(
+      gameConfig.hard.difficulty,
+      gameConfig.hard.timer,
+      gameConfig.hard.threshold,
+      this
+    );
     this.currentGame = this.games[this.difficulty];
   }
 
@@ -46,25 +65,18 @@ class GameController {
     return this.currentGame.getCurrentImage();
   }
 
-  getPartialTimer() {
+  getGameTimer() {
     return this.currentGame.timer;
   }
 
-  start() {
-    this.currentGame.start(); // initialize the first pose
+  start(fn) {
     this.globalTimer = 0;
+    this.currentGame.start();
+    fn();
   }
 
-  stop() {
-    this.currentGame.stop(); // not implemented yet
-  }
-
-  draw(canvasElement, canvasCtx) {
-    this.currentGame.draw(canvasElement, canvasCtx);
-  }
-
-  update(detect) {
-    this.currentGame.update(detect);
+  pause() {
+    this.currentGame.pause();
   }
 
   nextPose() {
@@ -72,8 +84,10 @@ class GameController {
   }
 
   nextGame() {
-    if (this.difficulty === this.games.length - 1) {
+    this.difficulty++;
+    if (this.difficulty >= this.games.length) {
       console.log("Game Over");
+      this.currentGame.stop();
       return;
     }
     this.currentGame = this.games[++this.difficulty];
