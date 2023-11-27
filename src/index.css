@@ -68,27 +68,3 @@ button:active {
   margin: 5px;
   padding: 0 10px;
 } */
-
-.detect {
-  position: absolute;
-  top: 0;
-  left: 10%;
-  color: white;
-}
-
-.test-description {
-  display: flex;
-  flex-direction: row;
-}
-
-.test-description span {
-  padding: 5px 8px;
-  border-radius: 10px;
-  font-family: "Comic Sans MS";
-  background-color: white;
-  font-weight: bold;
-}
-
-.test-description p {
-  margin: 10px 20px;
-}

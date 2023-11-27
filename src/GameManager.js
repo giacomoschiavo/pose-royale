@@ -157,18 +157,22 @@ const GameManager = () => {
     <>
       <div className={styles.gameContainer}>
         <Canvas gameUpdate={gameUpdate} gameDraw={gameDraw} />
-        <img
-          ref={imgRef}
-          className={`${styles.backgroundImg}`}
-          style={{
-            animationDuration: `${started ? currentTimer : 0}s`,
-          }}
-          alt="background_pose"
-        />
+        {showImage && (
+          <img
+            ref={imgRef}
+            className={`${shouldAnimate ? styles.zoomIn : ""} ${
+              styles.backgroundImg
+            }`}
+            style={{
+              animationDuration: `${started ? currentTimer : 0}s`,
+            }}
+            alt="background_pose"
+          />
+        )}
+        <p className={`${styles.text} ${styles.text1}`}>Timer: {seconds}</p>
+        <p>Score: {score}</p>
+        {ended && <p>Game Over</p>}
       </div>
-      <p>Timer: {seconds}</p>
-      <p>Score: {score}</p>
-      {ended && <p>Game Over</p>}
       <div>
         {loading && (
           <button
@@ -198,4 +202,4 @@ const GameManager = () => {
   );
 };
 
-export { GameManager };
+export default GameManager;
