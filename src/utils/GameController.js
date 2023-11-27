@@ -18,16 +18,16 @@ import rightLegRaiseImage from "../poses/rightlegraise.png";
 class GameController {
   constructor() {
     this.games = [null, null, null];
-    this.currentGame = null;
     this.globalScore = 0;
     this.globalTimer = 0;
     this.difficulty = 0;
     this.poses = [];
     this.images = [];
+    this.ended = false;
   }
 
   init() {
-    this.poses = [tpose, crab, nail, star, rightLegRaise];
+    this.poses = [tpose, crab];
     this.images = [
       tposeImage,
       crabImage,
@@ -36,62 +36,53 @@ class GameController {
       rightLegRaiseImage,
     ];
 
-    this.games[0] = new Game(
-      gameConfig.easy.difficulty,
-      gameConfig.easy.timer,
-      gameConfig.easy.threshold,
-      this
-    );
-    this.games[1] = new Game(
-      gameConfig.medium.difficulty,
-      gameConfig.medium.timer,
-      gameConfig.medium.threshold,
-      this
-    );
-    this.games[2] = new Game(
-      gameConfig.hard.difficulty,
-      gameConfig.hard.timer,
-      gameConfig.hard.threshold,
-      this
-    );
-    this.currentGame = this.games[this.difficulty];
+    this.games[0] = new Game(gameConfig.easy, this);
+    this.games[1] = new Game(gameConfig.medium, this);
+    this.games[2] = new Game(gameConfig.hard, this);
   }
 
   getCurrentPose() {
-    return this.currentGame.getCurrentPose();
+    return this.getCurrentGame().getCurrentPose();
   }
 
   getCurrentImage() {
-    return this.currentGame.getCurrentImage();
+    return this.getCurrentGame().getCurrentImage();
   }
 
   getGameTimer() {
-    return this.currentGame.timer;
+    return this.getCurrentGame().timer;
+  }
+
+  getDifficulty() {
+    return this.getCurrentGame().difficulty;
+  }
+
+  getCurrentGame() {
+    return this.games[this.difficulty];
   }
 
   start(fn) {
     this.globalTimer = 0;
-    this.currentGame.start();
+    this.getCurrentGame().start();
     fn();
   }
 
   pause() {
-    this.currentGame.pause();
+    this.getCurrentGame().pause();
   }
 
   nextPose() {
-    this.currentGame.nextPose();
+    this.getCurrentGame().nextPose();
   }
 
   nextGame() {
-    this.difficulty++;
-    if (this.difficulty >= this.games.length) {
+    if (this.difficulty + 1 >= this.games.length) {
       console.log("Game Over");
-      this.currentGame.stop();
+      this.ended = true;
       return;
     }
-    this.currentGame = this.games[++this.difficulty];
-    this.currentGame.start();
+    this.difficulty++;
+    this.getCurrentGame().start();
   }
 }
 

@@ -5,16 +5,16 @@
 // }
 
 class Game {
-  constructor(difficulty, timer, threshold, gc) {
+  constructor(config, gc) {
     this.indexPose = 0;
     this.started = false;
     this.paused = false;
     this.stopped = false;
     this.partialScore = 0;
-    this.timer = timer;
+    this.timer = config.timer;
     this.gc = gc;
-    this.threshold = threshold;
-    this.difficulty = difficulty;
+    this.threshold = config.threshold;
+    this.difficulty = config.difficulty;
     this.currentImage = null;
     this.currentPose = null;
     // only for testing

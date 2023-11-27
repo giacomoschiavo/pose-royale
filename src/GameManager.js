@@ -14,53 +14,48 @@ const GameManager = () => {
   const [poseLandmarker, setPoseLandmarker] = useState(null);
   const [landmarks, setLandmarks] = useState(null);
   const [gameController, setGameController] = useState(null);
-  // const [games, setGames] = useState([]);
-  // const [difficulty, setDifficulty] = useState(0);
-  // const [timer, setTimer] = useState(0);
-  // const [poses, setPoses] = useState([]);
-  // const [images, setImages] = useState([]);
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [detect, setDetect] = useState(false);
-  const [seconds, setSeconds] = useState(10);
-  // const [paused, setPaused] = useState(false);
+  const [seconds, setSeconds] = useState(1);
   const [started, setStarted] = useState(false);
   const squareSide = 0.08;
   const [checked, setChecked] = useState(false);
+  const [currentTimer, setCurrentTimer] = useState(0);
+  const [ended, setEnded] = useState(false);
 
   const imgRef = useRef(null);
-  // const [gameController, setGameController] = useState(null);
-  // useEffect(() => {
-  //   const gameController = new GameController();
-  //   gameController.init();
-  //   setGameController(gameController);
-  // }, [setGameController]);
 
   useEffect(() => {
     let gc = new GameController();
     gc.init();
     setGameController(gc);
+    setCurrentTimer(gc.getGameTimer());
+    setSeconds(gc.getGameTimer());
   }, []);
 
   // The timer
   useEffect(() => {
     if (loading) return;
     const timer = setInterval(() => {
+      if (ended) {
+        clearInterval(timer);
+        return;
+      }
       setSeconds((prevSeconds) => {
         prevSeconds -= 1;
         if (prevSeconds < 0) {
           setChecked(false);
-          prevSeconds = 10;
+          prevSeconds = currentTimer;
         }
         return prevSeconds;
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [loading]); // Aggiungi loading come dipendenza
+  }, [loading, currentTimer, ended]); // Aggiungi loading come dipendenza
 
   useEffect(() => {
-    if (seconds === 0 && !checked) {
+    if (!checked && gameController && landmarks) {
       setChecked(true);
       // detect if the pose is correct
       const passed = detectPose(
@@ -70,6 +65,12 @@ const GameManager = () => {
       );
       if (passed) setScore((prev) => prev + 1);
       gameController.nextPose();
+      if (gameController.ended) {
+        setEnded(true);
+      } else {
+        setCurrentTimer(gameController.getGameTimer());
+        setSeconds(gameController.getGameTimer());
+      }
     }
   }, [seconds, landmarks, gameController, checked]);
 
@@ -81,6 +82,11 @@ const GameManager = () => {
     (canvasElement, canvasCtx, video) => {
       let lastVideoTime = -1;
       let startTimeMs = performance.now();
+
+      if (ended) {
+        canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+        return;
+      }
 
       // this is triggered when "Load Skeleton" is clicked
       if (poseLandmarker && !loading) {
@@ -127,7 +133,7 @@ const GameManager = () => {
         }
       }
     },
-    [poseLandmarker, loading, gameController]
+    [poseLandmarker, loading, gameController, ended]
   );
 
   const gameUpdate = useCallback(() => {
@@ -135,7 +141,6 @@ const GameManager = () => {
   }, []);
 
   const handleDetection = () => {
-    // gameController.nextPose();
     setScore((prev) => prev + 1);
   };
 
@@ -145,19 +150,29 @@ const GameManager = () => {
     });
   }, [setPoseLandmarker]);
 
+  const shouldAnimate = seconds > 0 && started && !ended;
+  const showImage = started && !ended;
+
   return (
     <>
       <div className={styles.gameContainer}>
         <Canvas gameUpdate={gameUpdate} gameDraw={gameDraw} />
-        <img
-          ref={imgRef}
-          className={`${loading ? "" : styles.zoomIn} ${
-            loading ? "" : styles.backgroundImg
-          }`}
-          alt="background_pose"
-        />
+        {showImage && (
+          <img
+            ref={imgRef}
+            className={`${shouldAnimate ? styles.zoomIn : ""} ${
+              styles.backgroundImg
+            }`}
+            style={{
+              animationDuration: `${started ? currentTimer : 0}s`,
+            }}
+            alt="background_pose"
+          />
+        )}
+        <p>Timer: {seconds}</p>
+        <p>Score: {score}</p>
+        {ended && <p>Game Over</p>}
       </div>
-      <p>Timer: {seconds}</p>
       <div>
         {loading && (
           <button className={{}} onClick={() => setLoading(false)}>

@@ -25,12 +25,11 @@
     transform: translate(-50%, -50%) scale(0.1);
   }
   to {
-    transform: translate(-50%, -50%) scale(1); /* Adjust the scaling factor according to your needs */
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
 .zoomIn {
   animation-name: zoomIn;
-  animation-duration: 10s;
   animation-fill-mode: forwards;
 }
