@@ -91,7 +91,7 @@ const GameManager = () => {
       // this is triggered when "Load Skeleton" is clicked
       if (poseLandmarker && !loading) {
         // console.log(gameController);
-        gameController.start(() => setStarted(true));
+        gameController.start();
         imgRef.current.src = gameController.getCurrentImage();
 
         // draw matrix on screen (only for posing)
@@ -157,29 +157,30 @@ const GameManager = () => {
     <>
       <div className={styles.gameContainer}>
         <Canvas gameUpdate={gameUpdate} gameDraw={gameDraw} />
-        {showImage && (
-          <img
-            ref={imgRef}
-            className={`${shouldAnimate ? styles.zoomIn : ""} ${
-              styles.backgroundImg
-            }`}
-            style={{
-              animationDuration: `${started ? currentTimer : 0}s`,
-            }}
-            alt="background_pose"
-          />
-        )}
-        <p>Timer: {seconds}</p>
-        <p>Score: {score}</p>
-        {ended && <p>Game Over</p>}
+        <img
+          ref={imgRef}
+          className={`${styles.backgroundImg}`}
+          style={{
+            animationDuration: `${started ? currentTimer : 0}s`,
+          }}
+          alt="background_pose"
+        />
       </div>
+      <p>Timer: {seconds}</p>
+      <p>Score: {score}</p>
+      {ended && <p>Game Over</p>}
       <div>
         {loading && (
-          <button className={{}} onClick={() => setLoading(false)}>
+          <button
+            onClick={() => {
+              setLoading(false);
+              setStarted(true);
+            }}
+          >
             Start
           </button>
         )}
-        <button onClick={handleDetection}>Force Detection</button>
+        {/* <button onClick={handleDetection}>Force Detection</button> */}
       </div>
       {/* <div className="landmarks">
         <button onClick={getCoordinates}>Get Coordinates</button>

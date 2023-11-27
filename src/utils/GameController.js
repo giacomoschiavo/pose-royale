@@ -64,7 +64,7 @@ class GameController {
   start(fn) {
     this.globalTimer = 0;
     this.getCurrentGame().start();
-    fn();
+    // fn();
   }
 
   pause() {
