@@ -155,6 +155,11 @@ const GameManager = () => {
 
   return (
     <>
+      <div className={styles.hudContainer}>
+        <p className={`${styles.text}`}>Timer: {seconds}</p>
+        <p className={`${styles.text}`}>Score: {score}</p>
+      </div>
+
       <div className={styles.gameContainer}>
         <Canvas gameUpdate={gameUpdate} gameDraw={gameDraw} />
         {showImage && (
@@ -169,8 +174,7 @@ const GameManager = () => {
             alt="background_pose"
           />
         )}
-        <p className={`${styles.text} ${styles.text1}`}>Timer: {seconds}</p>
-        <p>Score: {score}</p>
+
         {ended && <p>Game Over</p>}
       </div>
       <div>

@@ -34,8 +34,20 @@
   animation-fill-mode: forwards;
 }
 
-.text {
+.hudContainer{
+  text-align: center;
 }
 
-.text1 {
+.text {
+  display: inline-block;
+  margin: 0;
+
+  font-family: 'Rowdies';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 30px;
+
+  color: #FFFFFF;
 }
+

@@ -1,3 +1,35 @@
 .prova {
   color: red;
 }
+
+.play{
+  /* Play! button */
+
+  position: absolute;
+  width: 421px;
+  height: 168px;
+  left: calc(50% - 421px/2 - 0.5px);
+  top: 571px;
+  background-color: #ffff;
+  border-color: #8E00E4;
+  border-radius: 20px;
+
+  /* Play! */
+
+  position: absolute;
+  width: 152px;
+  height: 74.09px;
+  left: 642px;
+  top: 617.96px;
+
+  font-family: 'Rowdies';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 57px;
+  line-height: 71px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #8E00E4;
+}

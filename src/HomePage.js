@@ -6,6 +6,7 @@ const HomePage = () => {
     <div>
       <h1 className={`${styles.prova}`}>Home Page</h1>
       <p>Questa è la home page</p>
+        <button className={`${styles.play}`}>Play!</button>
     </div>
   );
 };
