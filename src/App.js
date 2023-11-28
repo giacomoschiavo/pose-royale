@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import GameManager from "./GameManager";
 import HomePage from "./HomePage";
 import logo from "./img/logo.png";
+import styles from "./App.css";
 
 function App() {
   return (
