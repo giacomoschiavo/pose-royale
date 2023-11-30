@@ -1,22 +1,19 @@
 .play{
   /* Play! button */
 
-  position: absolute;
   width: 421px;
   height: 168px;
-  left: calc(50% - 421px/2 - 0.5px);
-  top: 571px;
   background-color: #ffff;
   border-color: #8E00E4;
   border-radius: 20px;
+  margin:0 auto;
+  margin-top: 400px;
+  display:block;
 
   /* Play! */
 
-  position: absolute;
   width: 152px;
   height: 74.09px;
-  left: 642px;
-  top: 617.96px;
 
   font-family: 'Rowdies';
   font-style: normal;
