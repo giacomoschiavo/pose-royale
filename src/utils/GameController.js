@@ -26,11 +26,17 @@ class GameController {
     this.poses = [];
     this.images = [];
     this.ended = false;
+    this.inTutorial = true;
+    this.started = true;
   }
 
   init() {
     this.poses = [inclineRight, inclineLeft];
     this.images = [inclineRightImage, inclineLeftImage];
+    this.inTutorial = true;
+
+    this.tutPose = tpose;
+    this.tutImage = tposeImage;
 
     this.games[0] = new Game(gameConfig.easy, this);
     this.games[1] = new Game(gameConfig.medium, this);
@@ -38,11 +44,15 @@ class GameController {
   }
 
   getCurrentPose() {
-    return this.getCurrentGame().getCurrentPose();
+    return this.inTutorial
+      ? this.tutPose
+      : this.getCurrentGame().getCurrentPose();
   }
 
   getCurrentImage() {
-    return this.getCurrentGame().getCurrentImage();
+    return this.inTutorial
+      ? this.tutImage
+      : this.getCurrentGame().getCurrentImage();
   }
 
   getGameTimer() {
@@ -57,10 +67,11 @@ class GameController {
     return this.games[this.difficulty];
   }
 
-  start(fn) {
+  start() {
     this.globalTimer = 0;
+    this.inTutorial = false;
+    this.started = true;
     this.getCurrentGame().start();
-    // fn();
   }
 
   pause() {
@@ -79,6 +90,18 @@ class GameController {
     }
     this.difficulty++;
     this.getCurrentGame().start();
+  }
+
+  isGameEnded() {
+    return this.ended;
+  }
+
+  isInTutorial() {
+    return this.inTutorial;
+  }
+
+  isGameStarted() {
+    return this.started;
   }
 }
 

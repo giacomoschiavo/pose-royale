@@ -52,6 +52,10 @@ class Game {
   getCurrentImage() {
     return this.currentImage;
   }
+
+  isStarted() {
+    return this.started;
+  }
 }
 
 export { Game };
