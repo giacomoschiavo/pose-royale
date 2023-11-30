@@ -1,8 +1,6 @@
 body {
-  background-color: #9a00d0;
-  background-image: url('./img/homeBackground.png');
-  background-size: cover;
-  background-repeat: no-repeat;
+  padding: 0;
+  margin: 0;
 }
 
 .App {

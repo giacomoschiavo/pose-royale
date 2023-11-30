@@ -1,28 +1,126 @@
-.play{
-  /* Play! button */
+.playContainer{
+  height: 100vh;
+  background-image: url('./img/homeBackground.png');
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+}
 
-  width: 421px;
-  height: 168px;
+.homeSectionContainer{
+  height: 100vh;
+  background-image: url('./img/playBackground.png');
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+}
+
+.linkContainer{
+  padding-top: 70px;
+  display: flex;
+  justify-content: right;
+}
+
+.linkText{
+  margin: 0px 20px 0px 20px;
+  color: #FFFFFF;
+}
+
+.buttonContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonDiv{
+  margin-top: 500px;
+  width: 154px;
+  height: 77px;
+  background-color: #ffff;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.playButton{
+  display: flex;
+  /* Play! button */
   background-color: #ffff;
   border-color: #8E00E4;
   border-radius: 20px;
+  border-width: 3px;
   margin:0 auto;
-  margin-top: 400px;
-  display:block;
 
   /* Play! */
 
   width: 152px;
-  height: 74.09px;
+  height: 75px;
 
   font-family: 'Rowdies';
   font-style: normal;
   font-weight: 700;
   font-size: 57px;
   line-height: 71px;
-  display: flex;
   align-items: center;
   text-align: center;
 
   color: #8E00E4;
+}
+
+.titleText{
+  text-align: center;
+  color: #FFFFFF;
+  margin: 50px 0px 0px 0px;
+  font-size: 80px;
+  font-weight: bold;
+}
+
+.subtitleText{
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.cardsContainer{
+  text-align: center;
+  margin-top: 100px;
+}
+
+.card {
+  display: inline-block;
+  width: 300px;
+  height: 300px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #FFFFFF;
+  text-align: center;
+  margin: 50px;
+}
+
+.cardImg {
+  padding-top: 50px;
+  width: 100px;
+  height: 167px;
+  display: inline-block;
+}
+
+.cardContent {
+  padding: 20px;
+}
+
+.cardText{
+  text-align: center;
+  font-weight: bold;
+}
+
+.teamMemberContainer{
+  display: inline-block;
+  margin: 0px 70px 0px 70px;
+}
+
+.teamImg{
+  width: 250px;
+  height: 328px;
 }
