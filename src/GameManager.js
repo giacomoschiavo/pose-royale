@@ -196,10 +196,12 @@ const GameManager = () => {
 
   return (
     <>
-      <div className={styles.hudContainer}>
-        <p className={`${styles.text}`}>Score: {score}</p>
-        <p className={`${styles.text}`}>Timer: {seconds}</p>
-        <p className={`${styles.text}`}>Level: 1</p>
+      <div className={`${styles.pageContainer}`}>
+        <div className={styles.hudContainer}>
+          <p className={`${styles.text}`}>Score: {score}</p>
+          <p className={`${styles.text}`}>Timer: {seconds}</p>
+          <p className={`${styles.text}`}>Level: 1</p>
+        </div>
       </div>
 
       <div className={styles.gameContainer}>
