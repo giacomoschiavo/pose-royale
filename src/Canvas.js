@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import styles from "./Canvas.module.css";
 
-const Canvas = ({ gameUpdate, gameDraw }) => {
+const Canvas = ({ gameDraw }) => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -16,7 +16,6 @@ const Canvas = ({ gameUpdate, gameDraw }) => {
     canvasElement.height = video.videoHeight;
 
     const draw = () => {
-      gameUpdate();
       gameDraw(canvasElement, canvasCtx, video);
       requestId.current = requestAnimationFrame(draw);
     };
@@ -30,7 +29,7 @@ const Canvas = ({ gameUpdate, gameDraw }) => {
         cancelAnimationFrame(requestId.current);
       }
     };
-  }, [webcamRef, canvasRef, gameDraw, gameUpdate]);
+  }, [webcamRef, canvasRef, gameDraw]);
 
   return (
     <div className={styles.container}>

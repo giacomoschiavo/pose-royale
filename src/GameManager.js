@@ -24,16 +24,12 @@ const GameManager = () => {
   const [ended, setEnded] = useState(false);
   const [timer, setTimer] = useState(null);
   const [inTutorial, setInTutorial] = useState(true);
+  const [startInitialCountdown, setStartInitialCountdown] = useState(false);
 
   const squareSide = 0.08;
   const imgRef = useRef(null);
 
-  const skipTutorial = () => {
-    setInTutorial(false);
-    gameController.start();
-    setSeconds(gameController.getGameTimer());
-    setCurrentTimer(gameController.getGameTimer());
-  };
+  const skipTutorial = () => {};
 
   useEffect(() => {
     initPoseLandmarker((poseLandmarker) => {
@@ -46,7 +42,31 @@ const GameManager = () => {
     gc.init();
     setGameController(gc);
     setInTutorial(gc.isInTutorial());
+    setSeconds(3); // for initial countdown
   }, []);
+
+  useEffect(() => {
+    if (startInitialCountdown) {
+      console.log("wait 3 seconds");
+
+      const timer = setInterval(() => {
+        setSeconds((prevSeconds) => {
+          prevSeconds -= 1;
+          return prevSeconds;
+        });
+      }, 1000);
+
+      setTimeout(() => {
+        gameController.start();
+        setInTutorial(false);
+        setStartInitialCountdown(false);
+        setStarted(true);
+        setSeconds(gameController.getGameTimer());
+        setCurrentTimer(gameController.getGameTimer());
+        clearInterval(timer);
+      }, 3000);
+    }
+  }, [startInitialCountdown, gameController]);
 
   // The timer, avoid starting it if the game is loading or in tutorial
   useEffect(() => {
@@ -81,7 +101,7 @@ const GameManager = () => {
         squareSide
       );
 
-      if (passed) skipTutorial();
+      if (passed) setStartInitialCountdown(true);
     }
 
     // if the pose is correct, increment the score
@@ -108,10 +128,6 @@ const GameManager = () => {
       }
     }
   }, [seconds, landmarks, gameController, checked, inTutorial, skipTutorial]);
-
-  // const getCoordinates = () => {
-  //   console.log(landmarks);
-  // };
 
   useEffect(() => {
     if (ended) {
@@ -171,10 +187,6 @@ const GameManager = () => {
     [poseLandmarker, loading, gameController]
   );
 
-  const gameUpdate = useCallback(() => {
-    // console.log("update state");
-  }, []);
-
   const handleDetection = () => {
     setScore((prev) => prev + 1);
   };
@@ -191,7 +203,7 @@ const GameManager = () => {
       </div>
 
       <div className={styles.gameContainer}>
-        {!ended && <Canvas gameUpdate={gameUpdate} gameDraw={gameDraw} />}
+        {!ended && <Canvas gameDraw={gameDraw} />}
         {showImage && (
           <img
             ref={imgRef}
@@ -200,6 +212,7 @@ const GameManager = () => {
             }`}
             style={{
               animationDuration: `${started ? currentTimer : 0}s`,
+              display: `${startInitialCountdown ? "none" : "block"}`,
             }}
             alt="background_pose"
           />
@@ -212,7 +225,11 @@ const GameManager = () => {
           </div>
         )}
 
-        {started && inTutorial && <p className={styles.topText}>TUTORIAL</p>}
+        {started && inTutorial && !startInitialCountdown && (
+          <p className={styles.topText}>TUTORIAL</p>
+        )}
+
+        {startInitialCountdown && <p className={styles.topText}>{seconds}</p>}
       </div>
       <div>
         {loading && (
@@ -226,7 +243,9 @@ const GameManager = () => {
           </button>
         )}
         {started && inTutorial && (
-          <button onClick={skipTutorial}>Skip tutorial</button>
+          <button onClick={() => setStartInitialCountdown(true)}>
+            Skip tutorial
+          </button>
         )}
       </div>
       {/* <div className="landmarks">
