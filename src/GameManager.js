@@ -155,42 +155,45 @@ const GameManager = () => {
 
   return (
     <>
-      <div className={styles.hudContainer}>
-        <p className={`${styles.text}`}>Score: {score}</p>
-        <p className={`${styles.text}`}>Timer: {seconds}</p>
-        <p className={`${styles.text}`}>Level: 1</p>
+      <div className={`${styles.pageContainer}`}>
+        <div className={styles.hudContainer}>
+          <p className={`${styles.text}`}>Score: {score}</p>
+          <p className={`${styles.text}`}>Timer: {seconds}</p>
+          <p className={`${styles.text}`}>Level: 1</p>
+        </div>
+
+        <div className={styles.gameContainer}>
+          <Canvas gameUpdate={gameUpdate} gameDraw={gameDraw} />
+          {showImage && (
+              <img
+                  ref={imgRef}
+                  className={`${shouldAnimate ? styles.zoomIn : ""} ${
+                      styles.backgroundImg
+                  }`}
+                  style={{
+                    animationDuration: `${started ? currentTimer : 0}s`,
+                  }}
+                  alt="background_pose"
+              />
+          )}
+
+          {ended && <p>Game Over</p>}
+        </div>
+        <div>
+          {loading && (
+              <button
+                  onClick={() => {
+                    setLoading(false);
+                    setStarted(true);
+                  }}
+              >
+                Start
+              </button>
+          )}
+          {/* <button onClick={handleDetection}>Force Detection</button> */}
+        </div>
       </div>
 
-      <div className={styles.gameContainer}>
-        <Canvas gameUpdate={gameUpdate} gameDraw={gameDraw} />
-        {showImage && (
-          <img
-            ref={imgRef}
-            className={`${shouldAnimate ? styles.zoomIn : ""} ${
-              styles.backgroundImg
-            }`}
-            style={{
-              animationDuration: `${started ? currentTimer : 0}s`,
-            }}
-            alt="background_pose"
-          />
-        )}
-
-        {ended && <p>Game Over</p>}
-      </div>
-      <div>
-        {loading && (
-          <button
-            onClick={() => {
-              setLoading(false);
-              setStarted(true);
-            }}
-          >
-            Start
-          </button>
-        )}
-        {/* <button onClick={handleDetection}>Force Detection</button> */}
-      </div>
       {/* <div className="landmarks">
         <button onClick={getCoordinates}>Get Coordinates</button>
         {landmarks &&
