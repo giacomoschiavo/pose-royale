@@ -9,6 +9,7 @@ import {
 } from "./detection";
 import { GameController } from "./utils/GameController";
 import styles from "./GameManager.module.css";
+import { set } from "lodash";
 
 const GameManager = () => {
   const [poseLandmarker, setPoseLandmarker] = useState(null);
@@ -18,44 +19,73 @@ const GameManager = () => {
   const [loading, setLoading] = useState(true);
   const [seconds, setSeconds] = useState(1);
   const [started, setStarted] = useState(false);
-  const squareSide = 0.08;
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(false); // end game, check poses
   const [currentTimer, setCurrentTimer] = useState(0);
   const [ended, setEnded] = useState(false);
+  const [timer, setTimer] = useState(null);
+  const [inTutorial, setInTutorial] = useState(true);
 
+  const squareSide = 0.08;
   const imgRef = useRef(null);
+
+  const skipTutorial = () => {
+    setInTutorial(false);
+    gameController.start();
+    setSeconds(gameController.getGameTimer());
+    setCurrentTimer(gameController.getGameTimer());
+  };
+
+  useEffect(() => {
+    initPoseLandmarker((poseLandmarker) => {
+      setPoseLandmarker(poseLandmarker);
+    });
+  }, [setPoseLandmarker]);
 
   useEffect(() => {
     let gc = new GameController();
     gc.init();
     setGameController(gc);
-    setCurrentTimer(gc.getGameTimer());
-    setSeconds(gc.getGameTimer());
+    setInTutorial(gc.isInTutorial());
   }, []);
 
-  // The timer
+  // The timer, avoid starting it if the game is loading or in tutorial
   useEffect(() => {
-    if (loading) return;
+    if (loading || inTutorial) return;
     const timer = setInterval(() => {
-      if (ended) {
-        clearInterval(timer);
-        return;
-      }
       setSeconds((prevSeconds) => {
         prevSeconds -= 1;
+        // time is over
         if (prevSeconds < 0) {
+          // time to check if the pose is correct
           setChecked(false);
+          // set new timer
           prevSeconds = currentTimer;
         }
         return prevSeconds;
       });
     }, 1000);
+    // set timer state so that we can clear it later
+    setTimer(timer);
 
+    // clean up function
     return () => clearInterval(timer);
-  }, [loading, currentTimer, ended]); // Aggiungi loading come dipendenza
+  }, [loading, currentTimer, inTutorial]); // Aggiungi loading come dipendenza
 
   useEffect(() => {
-    if (!checked && gameController && landmarks) {
+    if (!gameController || !landmarks) return;
+
+    if (inTutorial) {
+      const passed = detectPose(
+        gameController.getCurrentPose(),
+        landmarks,
+        squareSide
+      );
+
+      if (passed) skipTutorial();
+    }
+
+    // if the pose is correct, increment the score
+    if (!checked && !inTutorial) {
       setChecked(true);
       // detect if the pose is correct
       const passed = detectPose(
@@ -63,41 +93,47 @@ const GameManager = () => {
         landmarks,
         squareSide
       );
+      // increase of one point, not in tutorial
       if (passed) setScore((prev) => prev + 1);
+      // get next pose
       gameController.nextPose();
-      if (gameController.ended) {
+      // if the game is ended, set the state
+      if (gameController.isGameEnded()) {
         setEnded(true);
       } else {
+        // set new time based on difficulty of the game
         setCurrentTimer(gameController.getGameTimer());
+        // set timer
         setSeconds(gameController.getGameTimer());
       }
     }
-  }, [seconds, landmarks, gameController, checked]);
+  }, [seconds, landmarks, gameController, checked, inTutorial, skipTutorial]);
 
   // const getCoordinates = () => {
   //   console.log(landmarks);
   // };
+
+  useEffect(() => {
+    if (ended) {
+      clearInterval(timer);
+    }
+  }, [ended, timer]);
 
   const gameDraw = useCallback(
     (canvasElement, canvasCtx, video) => {
       let lastVideoTime = -1;
       let startTimeMs = performance.now();
 
-      if (ended) {
-        canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-        return;
-      }
-
-      // this is triggered when "Load Skeleton" is clicked
+      // this is triggered when "Start" is clicked
       if (poseLandmarker && !loading) {
         // console.log(gameController);
-        gameController.start();
+
+        // get the current image
         imgRef.current.src = gameController.getCurrentImage();
 
-        // draw matrix on screen (only for posing)
         canvasCtx.save();
-        // clear the canvas at each iteration
         canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
         if (video.currentTime !== lastVideoTime) {
           // drawGuidelines(canvasElement, canvasCtx);
 
@@ -108,7 +144,6 @@ const GameManager = () => {
             const idPoses = [0, 11, 12, 13, 14, 19, 20, 23, 24, 25, 26, 27, 28];
             const skeleton = filterLandmarks(result.landmarks, idPoses);
             setLandmarks(skeleton);
-
             // const squares = buildSquares(newLandmarks, squareSide);
 
             // draw squares of the skeleton
@@ -133,7 +168,7 @@ const GameManager = () => {
         }
       }
     },
-    [poseLandmarker, loading, gameController, ended]
+    [poseLandmarker, loading, gameController]
   );
 
   const gameUpdate = useCallback(() => {
@@ -144,13 +179,7 @@ const GameManager = () => {
     setScore((prev) => prev + 1);
   };
 
-  useEffect(() => {
-    initPoseLandmarker((poseLandmarker) => {
-      setPoseLandmarker(poseLandmarker);
-    });
-  }, [setPoseLandmarker]);
-
-  const shouldAnimate = seconds > 0 && started && !ended;
+  const shouldAnimate = seconds > 0 && started && !ended && !inTutorial;
   const showImage = started && !ended;
 
   return (
@@ -193,7 +222,6 @@ const GameManager = () => {
           {/* <button onClick={handleDetection}>Force Detection</button> */}
         </div>
       </div>
-
       {/* <div className="landmarks">
         <button onClick={getCoordinates}>Get Coordinates</button>
         {landmarks &&
