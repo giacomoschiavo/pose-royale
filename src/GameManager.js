@@ -10,6 +10,7 @@ import {
 import { GameController } from "./utils/GameController";
 import styles from "./GameManager.module.css";
 import { set } from "lodash";
+import BorderedButton from "./components/BorderedButton";
 
 const GameManager = () => {
   const [poseLandmarker, setPoseLandmarker] = useState(null);
@@ -28,6 +29,7 @@ const GameManager = () => {
   const [level, setLevel] = useState(0); // [0 = tutorial, 1 = easy, 2 = medium, 3 = hard]
 
   const squareSide = 0.08;
+  const countdown = 4;
   const imgRef = useRef(null);
 
   const skipTutorial = () => {};
@@ -48,8 +50,6 @@ const GameManager = () => {
 
   useEffect(() => {
     if (startInitialCountdown) {
-      console.log("wait 3 seconds");
-
       const timer = setInterval(() => {
         setSeconds((prevSeconds) => {
           prevSeconds -= 1;
@@ -66,7 +66,7 @@ const GameManager = () => {
         setSeconds(gameController.getGameTimer());
         setCurrentTimer(gameController.getGameTimer());
         clearInterval(timer);
-      }, 3000);
+      }, countdown * 1000);
     }
   }, [startInitialCountdown, gameController]);
 
@@ -198,31 +198,30 @@ const GameManager = () => {
 
   const shouldAnimate = seconds > 0 && started && !ended && !inTutorial;
   const showImage = started && !ended;
+  const showLevelText =
+    level == 0
+      ? "Tutorial"
+      : level == 1
+      ? "Easy"
+      : level == 2
+      ? "Medium"
+      : "Hard";
 
   return (
     <div className={styles.pageContainer}>
       <div className={styles.gameContainer}>
-        <div className={styles.hudContainer}>
-          <p className={`${styles.text}`}>Score: {score}</p>
-          <p className={`${styles.text}`}>Timer: {seconds}</p>
-          <p className={`${styles.text}`}>Level: {level}</p>
-        </div>
         <div className={styles.canvasContainer}>
           <Canvas gameDraw={gameDraw} />
           {loading && (
-            <div className={styles.background}>
-              <div className={styles.btnContainer}>
-                <button
-                  className={styles.styledButton}
-                  onClick={() => {
-                    setLoading(false);
-                    setStarted(true);
-                  }}
-                >
-                  Start
-                </button>
-              </div>
-            </div>
+            <BorderedButton
+              customStyle={`${styles.centered} ${styles.startButton}`}
+              onClick={() => {
+                setLoading(false);
+                setStarted(true);
+              }}
+            >
+              Start
+            </BorderedButton>
           )}
           {showImage && (
             <img
@@ -237,8 +236,18 @@ const GameManager = () => {
               alt="background_pose"
             />
           )}
+          {started && !inTutorial && (
+            <div className={`${styles.upperright} ${styles.timer}`}>
+              {seconds > 0 ? seconds : ""}
+            </div>
+          )}
           {started && inTutorial && !startInitialCountdown && (
-            <p className={styles.topText}>TUTORIAL</p>
+            <div>
+              <p className={styles.tutorialText}>TUTORIAL</p>
+              <p className={styles.bottomText}>
+                Assume this position to start the game!
+              </p>
+            </div>
           )}
           {ended && (
             <div className={styles.gameoverScreen}>
@@ -248,15 +257,31 @@ const GameManager = () => {
           {started && inTutorial && (
             <button
               onClick={() => setStartInitialCountdown(true)}
-              className={`${styles.styledButton} ${styles.centeredButton}`}
+              className={`${styles.styledButton} ${styles.centered}`}
+              style={{ opacity: 0.5 }}
             >
               Skip tutorial
             </button>
           )}
+          {startInitialCountdown && (
+            <div className={`${styles.centered} ${styles.countdown}`}>
+              {seconds > 0 ? seconds : "GO!"}
+            </div>
+          )}
         </div>
       </div>
-      <div className={styles.emojiContainer}>
-        <span className={styles.emoji}>{!ended ? "😐" : "👑"}</span>
+      <div className={styles.hudContainer}>
+        <div className={styles.emojiContainer}>
+          <span className={styles.emoji}>{!ended ? "😐" : "👑"}</span>
+        </div>
+        <div className={styles.hudBottom}>
+          <BorderedButton clickable={false} className={styles.hudItem}>
+            {showLevelText}
+          </BorderedButton>
+          <BorderedButton clickable={false} className={`${styles.hudItem}`}>
+            Score: {score}
+          </BorderedButton>
+        </div>
       </div>
     </div>
   );

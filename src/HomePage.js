@@ -7,6 +7,7 @@ import firstTeamMember from "./img/firstTeamMember.png";
 import secondTeamMember from "./img/secondTeamMember.png";
 import thirdTeamMember from "./img/thirdTeamMember.png";
 import logo from "./img/logo.png";
+import BorderedButton from "./components/BorderedButton";
 
 const HomePage = () => {
   return (
@@ -21,7 +22,9 @@ const HomePage = () => {
 
         <div className={`${styles.buttonContainer}`}>
           <div className={`${styles.buttonDiv}`}>
-            <button className={`${styles.playButton}`}>Play!</button>
+            <BorderedButton customStyle={`${styles.playButton}`}>
+              Play!
+            </BorderedButton>
           </div>
         </div>
       </div>

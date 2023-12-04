@@ -1,3 +1,24 @@
+@font-face {
+  font-family: "RowdiesBold";
+  src: local("RowdiesBold"),
+    url("./fonts/Rowdies/Rowdies-Bold.ttf") format("truetype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "RowdiesRegular";
+  src: local("RowdiesRegular"),
+    url("./fonts/Rowdies/Rowdies-Regular.ttf") format("truetype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "RowdiesLight";
+  src: local("RowdiesLight"),
+    url("./fonts/Rowdies/Rowdies-Light.ttf") format("truetype");
+  font-weight: lighter;
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -43,7 +64,7 @@ button {
   color: red;
   font-weight: bold;
   font-size: 1.2rem;
-  font-family: "Comic Sans MS";
+  font-family: "RowdiesBold";
   transform: scale(0.95);
   transition: 0.4s;
 }
