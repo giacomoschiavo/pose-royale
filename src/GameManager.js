@@ -19,12 +19,13 @@ const GameManager = () => {
   const [loading, setLoading] = useState(true);
   const [seconds, setSeconds] = useState(1);
   const [started, setStarted] = useState(false);
-  const [checked, setChecked] = useState(false); // end game, check poses
+  const [toCheck, setToCheck] = useState(false); // end game, check poses
   const [currentTimer, setCurrentTimer] = useState(0);
   const [ended, setEnded] = useState(false);
   const [timer, setTimer] = useState(null);
   const [inTutorial, setInTutorial] = useState(true);
   const [startInitialCountdown, setStartInitialCountdown] = useState(false);
+  const [level, setLevel] = useState(0); // [0 = tutorial, 1 = easy, 2 = medium, 3 = hard]
 
   const squareSide = 0.08;
   const imgRef = useRef(null);
@@ -61,6 +62,7 @@ const GameManager = () => {
         setInTutorial(false);
         setStartInitialCountdown(false);
         setStarted(true);
+        setLevel(gameController.getDifficulty() + 1);
         setSeconds(gameController.getGameTimer());
         setCurrentTimer(gameController.getGameTimer());
         clearInterval(timer);
@@ -77,7 +79,7 @@ const GameManager = () => {
         // time is over
         if (prevSeconds < 0) {
           // time to check if the pose is correct
-          setChecked(false);
+          setToCheck(true);
           // set new timer
           prevSeconds = currentTimer;
         }
@@ -95,6 +97,7 @@ const GameManager = () => {
     if (!gameController || !landmarks) return;
 
     if (inTutorial) {
+      // check in every frame
       const passed = detectPose(
         gameController.getCurrentPose(),
         landmarks,
@@ -105,8 +108,8 @@ const GameManager = () => {
     }
 
     // if the pose is correct, increment the score
-    if (!checked && !inTutorial) {
-      setChecked(true);
+    if (toCheck && !inTutorial) {
+      setToCheck(false);
       // detect if the pose is correct
       const passed = detectPose(
         gameController.getCurrentPose(),
@@ -121,13 +124,14 @@ const GameManager = () => {
       if (gameController.isGameEnded()) {
         setEnded(true);
       } else {
+        setLevel(gameController.getDifficulty() + 1);
         // set new time based on difficulty of the game
         setCurrentTimer(gameController.getGameTimer());
         // set timer
         setSeconds(gameController.getGameTimer());
       }
     }
-  }, [seconds, landmarks, gameController, checked, inTutorial, skipTutorial]);
+  }, [seconds, landmarks, gameController, toCheck, inTutorial, skipTutorial]);
 
   useEffect(() => {
     if (ended) {
@@ -201,7 +205,7 @@ const GameManager = () => {
         <div className={styles.hudContainer}>
           <p className={`${styles.text}`}>Score: {score}</p>
           <p className={`${styles.text}`}>Timer: {seconds}</p>
-          <p className={`${styles.text}`}>Level: 1</p>
+          <p className={`${styles.text}`}>Level: {level}</p>
         </div>
         <div className={styles.canvasContainer}>
           <Canvas gameDraw={gameDraw} />
@@ -239,7 +243,6 @@ const GameManager = () => {
           {ended && (
             <div className={styles.gameoverScreen}>
               <h1>Game Over</h1>
-              {/* <button className={styles.styledButton}>Retry?</button> */}
             </div>
           )}
           {started && inTutorial && (
