@@ -33,8 +33,8 @@ const Canvas = ({ gameDraw }) => {
 
   return (
     <div className={styles.container}>
-      <Webcam ref={webcamRef} />
-      <canvas ref={canvasRef} />
+      <Webcam ref={webcamRef} width={640} height={480} />
+      <canvas ref={canvasRef} className={styles.canvas} />
     </div>
   );
 };

@@ -145,7 +145,8 @@ const GameManager = () => {
         // console.log(gameController);
 
         // get the current image
-        imgRef.current.src = gameController.getCurrentImage();
+        if (imgRef.current)
+          imgRef.current.src = gameController.getCurrentImage();
 
         canvasCtx.save();
         canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
@@ -195,74 +196,67 @@ const GameManager = () => {
   const showImage = started && !ended;
 
   return (
-    <>
-      <div className={`${styles.pageContainer}`}>
+    <div className={styles.pageContainer}>
+      <div className={styles.gameContainer}>
         <div className={styles.hudContainer}>
           <p className={`${styles.text}`}>Score: {score}</p>
           <p className={`${styles.text}`}>Timer: {seconds}</p>
           <p className={`${styles.text}`}>Level: 1</p>
         </div>
+        <div className={styles.canvasContainer}>
+          <Canvas gameDraw={gameDraw} />
+          {loading && (
+            <div className={styles.background}>
+              <div className={styles.btnContainer}>
+                <button
+                  className={styles.styledButton}
+                  onClick={() => {
+                    setLoading(false);
+                    setStarted(true);
+                  }}
+                >
+                  Start
+                </button>
+              </div>
+            </div>
+          )}
+          {showImage && (
+            <img
+              ref={imgRef}
+              className={`${shouldAnimate ? styles.zoomIn : ""} ${
+                styles.backgroundImg
+              }`}
+              style={{
+                animationDuration: `${started ? currentTimer : 0}s`,
+                display: `${startInitialCountdown ? "none" : "block"}`,
+              }}
+              alt="background_pose"
+            />
+          )}
+          {started && inTutorial && !startInitialCountdown && (
+            <p className={styles.topText}>TUTORIAL</p>
+          )}
+          {ended && (
+            <div className={styles.gameoverScreen}>
+              <h1>Game Over</h1>
+              {/* <button className={styles.styledButton}>Retry?</button> */}
+            </div>
+          )}
+          {started && inTutorial && (
+            <button
+              onClick={() => setStartInitialCountdown(true)}
+              className={`${styles.styledButton} ${styles.centeredButton}`}
+            >
+              Skip tutorial
+            </button>
+          )}
+          {startInitialCountdown && <p className={styles.topText}>{seconds}</p>}
+        </div>
       </div>
-
-      <div className={styles.gameContainer}>
-        {!ended && <Canvas gameDraw={gameDraw} />}
-        {showImage && (
-          <img
-            ref={imgRef}
-            className={`${shouldAnimate ? styles.zoomIn : ""} ${
-              styles.backgroundImg
-            }`}
-            style={{
-              animationDuration: `${started ? currentTimer : 0}s`,
-              display: `${startInitialCountdown ? "none" : "block"}`,
-            }}
-            alt="background_pose"
-          />
-        )}
-
-        {ended && (
-          <div className={styles.gameoverScreen}>
-            <h1>Game Over</h1>
-            <button>Retry?</button>
-          </div>
-        )}
-
-        {started && inTutorial && !startInitialCountdown && (
-          <p className={styles.topText}>TUTORIAL</p>
-        )}
-
-        {startInitialCountdown && <p className={styles.topText}>{seconds}</p>}
+      <div className={styles.emojiContainer}>
+        <span className={styles.emoji}>😐</span>
       </div>
-      <div>
-        {loading && (
-          <button
-            onClick={() => {
-              setLoading(false);
-              setStarted(true);
-            }}
-          >
-            Start
-          </button>
-        )}
-        {started && inTutorial && (
-          <button onClick={() => setStartInitialCountdown(true)}>
-            Skip tutorial
-          </button>
-        )}
-      </div>
-      {/* <div className="landmarks">
-        <button onClick={getCoordinates}>Get Coordinates</button>
-        {landmarks &&
-          Object.keys(landmarks).map((key) => (
-            <ul className="coordinates">
-              <li key={key}>
-                Index: {key}, x: {landmarks[key].x.toFixed(3)}, y:
-                {landmarks[key].y.toFixed(3)}
-              </li>
-            </ul>
-          ))}
-      </div> */}
-    </>
+    </div>
   );
 };
 

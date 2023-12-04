@@ -1,7 +1,13 @@
-.pageContainer{
+.pageContainer {
+  overflow: hidden;
+  max-width: 100vw;
   height: 100vh;
-  background-image: url('./img/playBackground.png');
+  background-image: url("./img/playBackground.png");
   background-size: cover;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  padding: 0 20px;
 }
 
 .gameContainer {
@@ -10,12 +16,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin: 20px;
 }
-
-.gameContainer > canvas {
-  position: absolute;
-  border: 1px solid black;
-  margin: 10px;
+.canvasContainer {
+  position: relative;
 }
 
 .backgroundImg {
@@ -41,26 +45,27 @@
 }
 
 .hudContainer {
-  text-align: center;
-  padding-top: 120px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.hudContainer > p {
+  margin: 0 10px;
 }
 
 .text {
-  display: inline-block;
-  margin: 0;
-
   font-family: "Rowdies";
-  font-style: normal;
-  font-weight: 700;
   font-size: 24px;
-  line-height: 30px;
-
-  margin: 0px 80px 10px 80px;
-
   color: #ffffff;
 }
 
 .gameoverScreen {
+  background-color: black;
+  color: white;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   display: flex;
@@ -71,5 +76,57 @@
 
 .topText {
   position: absolute;
+  text-align: center;
+  top: 10px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+.styledButton {
+  color: #8e00e4;
+  background-color: white;
+  border: 3px solid #8e00e4;
+  font-size: 30px;
+  padding: 10px 30px;
+  border-radius: 50px;
+}
+
+.centeredButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.background {
+  position: absolute;
   top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.btnContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  background-color: white;
+  padding: 2px;
+  border-radius: 50px;
+}
+
+.emojiContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 30%;
+}
+
+.emoji {
+  font-size: 15rem;
 }
