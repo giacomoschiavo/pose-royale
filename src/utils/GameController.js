@@ -1,17 +1,7 @@
 import { gameConfig } from "./gameConfig";
 import { Game } from "./Game";
-import tpose from "../poses/tpose.json";
-import crab from "../poses/crab.json";
-import nail from "../poses/nail.json";
-import star from "../poses/star.json";
-import inclineLeft from "../poses/InclineLeft.json";
-import inclineRight from "../poses/InclineRight.json";
 import tposeImage from "../poses/TPose.png";
-import crabImage from "../poses/crab.png";
-import nailImage from "../poses/nailpose.png";
-import starImage from "../poses/starPose.png";
-import inclineLeftImage from "../poses/InclineLeft.png";
-import inclineRightImage from "../poses/InclineRight.png";
+import tpose from "../poses/tpose.json";
 
 // questa classe deve essere mantenuta come read only
 // nessun valore deve essere modificato
@@ -23,16 +13,12 @@ class GameController {
     this.globalScore = 0;
     this.globalTimer = 0;
     this.difficulty = 0;
-    this.poses = [];
-    this.images = [];
     this.ended = false;
     this.inTutorial = true;
     this.started = true;
   }
 
   init() {
-    this.poses = [inclineRight, inclineLeft];
-    this.images = [inclineRightImage, inclineLeftImage];
     this.inTutorial = true;
 
     this.tutPose = tpose;

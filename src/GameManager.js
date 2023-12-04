@@ -253,11 +253,10 @@ const GameManager = () => {
               Skip tutorial
             </button>
           )}
-          {startInitialCountdown && <p className={styles.topText}>{seconds}</p>}
         </div>
       </div>
       <div className={styles.emojiContainer}>
-        <span className={styles.emoji}>😐</span>
+        <span className={styles.emoji}>{!ended ? "😐" : "👑"}</span>
       </div>
     </div>
   );

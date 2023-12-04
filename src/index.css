@@ -18,9 +18,12 @@ video {
   left: 0;
   width: 640px;
   height: 480px;
-  clear: both;
   transform: rotateY(180deg);
-  border-radius: 5px;
+  border-radius: 20px;
+}
+
+img {
+  border-radius: 20px;
 }
 
 canvas {
@@ -31,6 +34,7 @@ canvas {
   width: 640px;
   height: 480px;
 }
+
 button {
   cursor: pointer;
   border-radius: 5px;
@@ -49,10 +53,3 @@ button {
   color: yellow;
   transform: scale(1.05);
 }
-
-/* .coordinates {
-  border: 1px solid black;
-  border-radius: 10px;
-  margin: 5px;
-  padding: 0 10px;
-} */

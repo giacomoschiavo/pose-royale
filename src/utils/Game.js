@@ -18,8 +18,8 @@ class Game {
     this.currentImage = null;
     this.currentPose = null;
     // only for testing
-    this.poses = this.gc.poses;
-    this.images = this.gc.images;
+    this.poses = config.poses;
+    this.images = config.images;
     this.currentPose = this.poses[this.indexPose];
     this.currentImage = this.images[this.indexPose];
   }
