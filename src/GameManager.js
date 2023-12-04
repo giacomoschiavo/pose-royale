@@ -22,6 +22,7 @@ const GameManager = () => {
   const [started, setStarted] = useState(false);
   const [toCheck, setToCheck] = useState(false); // end game, check poses
   const [currentTimer, setCurrentTimer] = useState(0);
+  const [passed, setPassed] = useState(false); // [true = passed, false = failed
   const [ended, setEnded] = useState(false);
   const [timer, setTimer] = useState(null);
   const [inTutorial, setInTutorial] = useState(true);
@@ -96,26 +97,20 @@ const GameManager = () => {
   useEffect(() => {
     if (!gameController || !landmarks) return;
 
-    if (inTutorial) {
-      // check in every frame
-      const passed = detectPose(
-        gameController.getCurrentPose(),
-        landmarks,
-        squareSide
-      );
+    // detect if the pose is correct
+    const detected = detectPose(
+      gameController.getCurrentPose(),
+      landmarks,
+      squareSide
+    );
 
-      if (passed) setStartInitialCountdown(true);
-    }
+    setPassed(detected);
+
+    if (inTutorial && passed) setStartInitialCountdown(true);
 
     // if the pose is correct, increment the score
     if (toCheck && !inTutorial) {
       setToCheck(false);
-      // detect if the pose is correct
-      const passed = detectPose(
-        gameController.getCurrentPose(),
-        landmarks,
-        squareSide
-      );
       // increase of one point, not in tutorial
       if (passed) setScore((prev) => prev + 1);
       // get next pose
@@ -131,7 +126,15 @@ const GameManager = () => {
         setSeconds(gameController.getGameTimer());
       }
     }
-  }, [seconds, landmarks, gameController, toCheck, inTutorial, skipTutorial]);
+  }, [
+    seconds,
+    landmarks,
+    gameController,
+    toCheck,
+    inTutorial,
+    skipTutorial,
+    passed,
+  ]);
 
   useEffect(() => {
     if (ended) {
@@ -199,11 +202,11 @@ const GameManager = () => {
   const shouldAnimate = seconds > 0 && started && !ended && !inTutorial;
   const showImage = started && !ended;
   const showLevelText =
-    level == 0
+    level === 0
       ? "Tutorial"
-      : level == 1
+      : level === 1
       ? "Easy"
-      : level == 2
+      : level === 2
       ? "Medium"
       : "Hard";
 
@@ -272,7 +275,9 @@ const GameManager = () => {
       </div>
       <div className={styles.hudContainer}>
         <div className={styles.emojiContainer}>
-          <span className={styles.emoji}>{!ended ? "😐" : "👑"}</span>
+          <span className={styles.emoji}>
+            {!ended ? (passed ? "😆" : "😐") : "👑"}
+          </span>
         </div>
         <div className={styles.hudBottom}>
           <BorderedButton clickable={false} className={styles.hudItem}>

@@ -97,6 +97,10 @@
   text-shadow: 2px 2px 10px black;
 }
 
+.emojiContainer {
+  padding: 20px 0;
+}
+
 .emoji {
   font-size: 15rem;
 }
