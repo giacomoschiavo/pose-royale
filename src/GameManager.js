@@ -6,10 +6,9 @@ import {
   drawCircles,
   detectPose,
   drawSquares,
-} from "./detection";
+} from "./utils/utils";
 import { GameController } from "./utils/GameController";
 import styles from "./GameManager.module.css";
-import { set } from "lodash";
 import BorderedButton from "./components/BorderedButton";
 
 const GameManager = () => {
@@ -29,11 +28,9 @@ const GameManager = () => {
   const [startInitialCountdown, setStartInitialCountdown] = useState(false);
   const [level, setLevel] = useState(0); // [0 = tutorial, 1 = easy, 2 = medium, 3 = hard]
 
-  const squareSide = 0.08;
+  const squareSide = 0.1;
   const countdown = 4;
   const imgRef = useRef(null);
-
-  const skipTutorial = () => {};
 
   useEffect(() => {
     initPoseLandmarker((poseLandmarker) => {
@@ -119,6 +116,7 @@ const GameManager = () => {
       if (gameController.isGameEnded()) {
         setEnded(true);
       } else {
+        // set level
         setLevel(gameController.getDifficulty() + 1);
         // set new time based on difficulty of the game
         setCurrentTimer(gameController.getGameTimer());
@@ -126,15 +124,7 @@ const GameManager = () => {
         setSeconds(gameController.getGameTimer());
       }
     }
-  }, [
-    seconds,
-    landmarks,
-    gameController,
-    toCheck,
-    inTutorial,
-    skipTutorial,
-    passed,
-  ]);
+  }, [seconds, landmarks, gameController, toCheck, inTutorial, passed]);
 
   useEffect(() => {
     if (ended) {
@@ -185,7 +175,7 @@ const GameManager = () => {
               canvasCtx,
               gameController.getCurrentPose(),
               squareSide,
-              "blue"
+              "black"
             );
             canvasCtx.restore();
           });
@@ -194,10 +184,6 @@ const GameManager = () => {
     },
     [poseLandmarker, loading, gameController]
   );
-
-  const handleDetection = () => {
-    setScore((prev) => prev + 1);
-  };
 
   const shouldAnimate = seconds > 0 && started && !ended && !inTutorial;
   const showImage = started && !ended;
@@ -209,6 +195,8 @@ const GameManager = () => {
       : level === 2
       ? "Medium"
       : "Hard";
+
+  const showTutorialText = started && inTutorial && !startInitialCountdown;
 
   return (
     <div className={styles.pageContainer}>
@@ -241,10 +229,10 @@ const GameManager = () => {
           )}
           {started && !inTutorial && (
             <div className={`${styles.upperright} ${styles.timer}`}>
-              {seconds > 0 ? seconds : ""}
+              {seconds}
             </div>
           )}
-          {started && inTutorial && !startInitialCountdown && (
+          {showTutorialText && (
             <div>
               <p className={styles.tutorialText}>TUTORIAL</p>
               <p className={styles.bottomText}>
@@ -257,6 +245,8 @@ const GameManager = () => {
               <h1>Game Over</h1>
             </div>
           )}
+
+          {/* only for testing */}
           {started && inTutorial && (
             <button
               onClick={() => setStartInitialCountdown(true)}
@@ -266,6 +256,8 @@ const GameManager = () => {
               Skip tutorial
             </button>
           )}
+
+          {/* Show initial countdown */}
           {startInitialCountdown && (
             <div className={`${styles.centered} ${styles.countdown}`}>
               {seconds > 0 ? seconds : "GO!"}
