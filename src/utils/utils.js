@@ -38,20 +38,16 @@ export const detectPoses = (poseLandmarks, actualLandMarks) => {
 
 export const detectPose = (poseLandmarks, skeletonLandMarks, squareSide) => {
   if (skeletonLandMarks.length === 0) return false;
-  return Object.keys(poseLandmarks).every((key) => {
+  return Object.keys(poseLandmarks).reduce((partialSum, key) => {
     const pose = poseLandmarks[key];
     const actual = skeletonLandMarks[key];
-    if (!actual) return false;
-    // console.log(
-    //   key,
-    //   Math.abs(pose.x - actual.x) < squareSide / 2 &&
-    //     Math.abs(pose.y - actual.y) < squareSide / 2
-    // );
-    return (
+    if (!actual) return partialSum;
+    const passed =
       Math.abs(pose.x - actual.x) < squareSide / 2 &&
-      Math.abs(pose.y - actual.y) < squareSide / 2
-    );
-  });
+      Math.abs(pose.y - actual.y) < squareSide / 2;
+    if (passed) partialSum++;
+    return partialSum;
+  }, 0);
 };
 
 export const drawSquares = (

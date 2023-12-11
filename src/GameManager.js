@@ -27,7 +27,10 @@ const GameManager = () => {
   const [inTutorial, setInTutorial] = useState(true);
   const [startInitialCountdown, setStartInitialCountdown] = useState(false);
   const [level, setLevel] = useState(0); // [0 = tutorial, 1 = easy, 2 = medium, 3 = hard]
+  const [accuracy, setAccuracy] = useState(0);
+  const [accuracies, setAccuracies] = useState([]);
 
+  const numPoints = 13;
   const squareSide = 0.1;
   const countdown = 4;
   const imgRef = useRef(null);
@@ -95,11 +98,14 @@ const GameManager = () => {
     if (!gameController || !landmarks) return;
 
     // detect if the pose is correct
-    const detected = detectPose(
+    let detected = detectPose(
       gameController.getCurrentPose(),
       landmarks,
       squareSide
     );
+
+    setAccuracy(((detected / numPoints) * 100).toFixed(1));
+    detected = detected >= numPoints;
 
     setPassed(detected);
 
@@ -108,6 +114,7 @@ const GameManager = () => {
     // if the pose is correct, increment the score
     if (toCheck && !inTutorial) {
       setToCheck(false);
+      setAccuracies((prev) => [...prev, accuracy]);
       // increase of one point, not in tutorial
       if (passed) setScore((prev) => prev + 1);
       // get next pose
@@ -115,6 +122,7 @@ const GameManager = () => {
       // if the game is ended, set the state
       if (gameController.isGameEnded()) {
         setEnded(true);
+        console.log(accuracies);
       } else {
         // set level
         setLevel(gameController.getDifficulty() + 1);
@@ -124,7 +132,16 @@ const GameManager = () => {
         setSeconds(gameController.getGameTimer());
       }
     }
-  }, [seconds, landmarks, gameController, toCheck, inTutorial, passed]);
+  }, [
+    seconds,
+    landmarks,
+    gameController,
+    toCheck,
+    inTutorial,
+    passed,
+    accuracies,
+    accuracy,
+  ]);
 
   useEffect(() => {
     if (ended) {
@@ -156,6 +173,7 @@ const GameManager = () => {
             // // pick only chosen ids
             const squareSide = 0.08;
             const idPoses = [0, 11, 12, 13, 14, 19, 20, 23, 24, 25, 26, 27, 28];
+
             const skeleton = filterLandmarks(result.landmarks, idPoses);
             setLandmarks(skeleton);
             // const squares = buildSquares(newLandmarks, squareSide);
@@ -268,6 +286,9 @@ const GameManager = () => {
               </div>
               <div className={`${styles.hudCheck} ${styles.upperleft}`}>
                 {!ended ? (passed ? "😆" : "😒") : "👑"}
+              </div>
+              <div className={`${styles.hudAccuracy} ${styles.uppercenter}`}>
+                {accuracy}
               </div>
             </div>
           )}

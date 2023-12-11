@@ -176,6 +176,19 @@
   margin: 0;
 }
 
+.hudAccuracy {
+  position: absolute;
+  font-family: "RowdiesRegular";
+  font-size: 20px;
+  top: 20px;
+}
+
+.uppercenter {
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
 .centeredButton {
   position: absolute;
   top: 50%;
