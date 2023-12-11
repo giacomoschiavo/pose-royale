@@ -24,21 +24,18 @@ export const gameConfig = {
   easy: {
     difficulty: 0,
     timer: 5,
-    threshold: 5,
     poses: [crab, nail, rightLegRaise],
     images: [crabImage, nailImage, rightLegRaiseImage],
   },
   medium: {
     difficulty: 1,
     timer: 4,
-    threshold: 4,
     poses: [star, inclineLeft, inclineRight],
     images: [starImage, inclineLeftImage, inclineRightImage],
   },
   hard: {
     difficulty: 2,
     timer: 3,
-    threshold: 3,
     poses: [balanceRight, doubleHandPose, oPose, wPose],
     images: [balanceRightImage, doubleHandPoseImage, oPoseImage, wPoseImage],
   },

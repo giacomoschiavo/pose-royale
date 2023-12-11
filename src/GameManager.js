@@ -227,17 +227,20 @@ const GameManager = () => {
               alt="background_pose"
             />
           )}
-          {started && !inTutorial && (
-            <div className={`${styles.upperright} ${styles.timer}`}>
-              {seconds}
-            </div>
-          )}
+
           {showTutorialText && (
-            <div>
-              <p className={styles.tutorialText}>TUTORIAL</p>
-              <p className={styles.bottomText}>
+            <div className={styles.hudTutorial}>
+              <p className={styles.top}>TUTORIAL</p>
+              <p className={styles.bottom}>
                 Assume this position to start the game!
               </p>
+              <button
+                onClick={() => setStartInitialCountdown(true)}
+                className={styles.centered}
+                style={{ opacity: 0.8 }}
+              >
+                Skip tutorial
+              </button>
             </div>
           )}
           {ended && (
@@ -246,39 +249,32 @@ const GameManager = () => {
             </div>
           )}
 
-          {/* only for testing */}
-          {started && inTutorial && (
-            <button
-              onClick={() => setStartInitialCountdown(true)}
-              className={`${styles.styledButton} ${styles.centered}`}
-              style={{ opacity: 0.5 }}
-            >
-              Skip tutorial
-            </button>
-          )}
-
           {/* Show initial countdown */}
-          {startInitialCountdown && (
-            <div className={`${styles.centered} ${styles.countdown}`}>
-              {seconds > 0 ? seconds : "GO!"}
+          {started && (
+            <div className={styles.hudContainer}>
+              {!inTutorial && (
+                <div className={`${styles.hudTimer} ${styles.upperright}`}>
+                  {seconds}
+                </div>
+              )}
+              <div className={`${styles.hudLevel} ${styles.bottomright}`}>
+                {showLevelText}
+              </div>
+              <div className={`${styles.hudScore} ${styles.bottomleft}`}>
+                {score}
+                <p>SCORE</p>
+              </div>
+              <div className={`${styles.hudCheck} ${styles.upperleft}`}>
+                {!ended ? (passed ? "😆" : "😐") : "👑"}
+              </div>
             </div>
           )}
         </div>
-      </div>
-      <div className={styles.hudContainer}>
-        <div className={styles.emojiContainer}>
-          <span className={styles.emoji}>
-            {!ended ? (passed ? "😆" : "😐") : "👑"}
-          </span>
-        </div>
-        <div className={styles.hudBottom}>
-          <BorderedButton clickable={false} className={styles.hudItem}>
-            {showLevelText}
-          </BorderedButton>
-          <BorderedButton clickable={false} className={`${styles.hudItem}`}>
-            Score: {score}
-          </BorderedButton>
-        </div>
+        {startInitialCountdown && (
+          <div className={`${styles.centered} ${styles.initialCountdown}`}>
+            {seconds > 0 ? seconds : "GO!"}
+          </div>
+        )}
       </div>
     </div>
   );

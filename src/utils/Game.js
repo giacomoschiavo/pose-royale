@@ -10,14 +10,9 @@ class Game {
     this.started = false;
     this.paused = false;
     this.stopped = false;
-    this.partialScore = 0;
     this.timer = config.timer;
     this.gc = gc;
-    this.threshold = config.threshold;
     this.difficulty = config.difficulty;
-    this.currentImage = null;
-    this.currentPose = null;
-    // only for testing
     this.poses = config.poses;
     this.images = config.images;
     this.currentPose = this.poses[this.indexPose];
