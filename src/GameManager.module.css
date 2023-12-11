@@ -49,6 +49,7 @@
 }
 
 .gameoverScreen {
+  font-family: "RowdiesBold";
   background-color: black;
   color: white;
   position: absolute;

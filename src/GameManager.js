@@ -252,20 +252,22 @@ const GameManager = () => {
           {/* Show initial countdown */}
           {started && (
             <div className={styles.hudContainer}>
-              {!inTutorial && (
+              {!inTutorial && !ended && (
                 <div className={`${styles.hudTimer} ${styles.upperright}`}>
                   {seconds}
                 </div>
               )}
-              <div className={`${styles.hudLevel} ${styles.bottomright}`}>
-                {showLevelText}
-              </div>
+              {!ended && (
+                <div className={`${styles.hudLevel} ${styles.bottomright}`}>
+                  {showLevelText}
+                </div>
+              )}
               <div className={`${styles.hudScore} ${styles.bottomleft}`}>
                 {score}
                 <p>SCORE</p>
               </div>
               <div className={`${styles.hudCheck} ${styles.upperleft}`}>
-                {!ended ? (passed ? "😆" : "😐") : "👑"}
+                {!ended ? (passed ? "😆" : "😒") : "👑"}
               </div>
             </div>
           )}
