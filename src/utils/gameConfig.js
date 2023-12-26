@@ -24,19 +24,19 @@ export const gameConfig = {
   easy: {
     difficulty: 0,
     timer: 5,
-    poses: [crab, nail, rightLegRaise],
-    images: [crabImage, nailImage, rightLegRaiseImage],
+    poses: [wPose, oPose, doubleHandPose, nail],
+    images: [wPoseImage, oPoseImage, doubleHandPoseImage, nailImage],
   },
   medium: {
     difficulty: 1,
-    timer: 4,
-    poses: [star, inclineLeft, inclineRight],
-    images: [starImage, inclineLeftImage, inclineRightImage],
+    timer: 7,
+    poses: [inclineLeft, inclineRight, star],
+    images: [inclineLeftImage, inclineRightImage, starImage],
   },
   hard: {
     difficulty: 2,
-    timer: 3,
-    poses: [balanceRight, doubleHandPose, oPose, wPose],
-    images: [balanceRightImage, doubleHandPoseImage, oPoseImage, wPoseImage],
+    timer: 9,
+    poses: [crab, rightLegRaise, balanceRight],
+    images: [crabImage, rightLegRaiseImage, balanceRightImage],
   },
 };

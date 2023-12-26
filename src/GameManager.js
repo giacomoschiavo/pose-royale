@@ -104,7 +104,8 @@ const GameManager = () => {
       squareSide
     );
 
-    setAccuracy(((detected / numPoints) * 100).toFixed(1));
+    const currentAccuracy = (detected / numPoints) * 100;
+    setAccuracy(currentAccuracy);
     detected = detected >= numPoints;
 
     setPassed(detected);
@@ -114,7 +115,8 @@ const GameManager = () => {
     // if the pose is correct, increment the score
     if (toCheck && !inTutorial) {
       setToCheck(false);
-      setAccuracies((prev) => [...prev, accuracy]);
+      const currentAccuracies = [...accuracies, currentAccuracy];
+      setAccuracies(currentAccuracies);
       // increase of one point, not in tutorial
       if (passed) setScore((prev) => prev + 1);
       // get next pose
@@ -122,7 +124,8 @@ const GameManager = () => {
       // if the game is ended, set the state
       if (gameController.isGameEnded()) {
         setEnded(true);
-        console.log(accuracies);
+        const summed = currentAccuracies.reduce((a, b) => a + b, 0);
+        console.log(summed / currentAccuracies.length);
       } else {
         // set level
         setLevel(gameController.getDifficulty() + 1);
@@ -171,7 +174,6 @@ const GameManager = () => {
           // detect poses
           poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
             // // pick only chosen ids
-            const squareSide = 0.08;
             const idPoses = [0, 11, 12, 13, 14, 19, 20, 23, 24, 25, 26, 27, 28];
 
             const skeleton = filterLandmarks(result.landmarks, idPoses);
