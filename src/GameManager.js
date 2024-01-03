@@ -181,22 +181,22 @@ const GameManager = () => {
             // const squares = buildSquares(newLandmarks, squareSide);
 
             // draw squares of the skeleton
-            drawCircles(
-              canvasElement,
-              canvasCtx,
-              skeleton,
-              squareSide / 2,
-              "red"
-            );
+            // drawCircles(
+            //   canvasElement,
+            //   canvasCtx,
+            //   skeleton,
+            //   squareSide / 2,
+            //   "red"
+            // );
 
             // draw squares of the pose (tpose)
-            drawSquares(
-              canvasElement,
-              canvasCtx,
-              gameController.getCurrentPose(),
-              squareSide,
-              "black"
-            );
+            // drawSquares(
+            //   canvasElement,
+            //   canvasCtx,
+            //   gameController.getCurrentPose(),
+            //   squareSide,
+            //   "black"
+            // );
             canvasCtx.restore();
           });
         }
@@ -254,13 +254,13 @@ const GameManager = () => {
               <p className={styles.bottom}>
                 Assume this position to start the game!
               </p>
-              <button
+              {/* <button
                 onClick={() => setStartInitialCountdown(true)}
                 className={styles.centered}
                 style={{ opacity: 0.8 }}
               >
                 Skip tutorial
-              </button>
+              </button> */}
             </div>
           )}
           {ended && (
@@ -289,9 +289,9 @@ const GameManager = () => {
               <div className={`${styles.hudCheck} ${styles.upperleft}`}>
                 {!ended ? (passed ? "😆" : "😒") : "👑"}
               </div>
-              <div className={`${styles.hudAccuracy} ${styles.uppercenter}`}>
+              {/*<div className={`${styles.hudAccuracy} ${styles.uppercenter}`}>
                 {accuracy}
-              </div>
+              </div>*/}
             </div>
           )}
         </div>
