@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
-import styles from "./Canvas.module.css";
+import styles from "./CanvasVideo.module.css";
 
-const Canvas = ({ gameDraw }) => {
+const CanvasVideo = ({ gameDraw }) => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -39,4 +39,4 @@ const Canvas = ({ gameDraw }) => {
   );
 };
 
-export default Canvas;
+export default CanvasVideo;

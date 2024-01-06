@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import Canvas from "./Canvas";
+import CanvasVideo from "./CanvasVideo";
 import {
   initPoseLandmarker,
   filterLandmarks,
@@ -222,7 +222,7 @@ const GameManager = () => {
     <div className={styles.pageContainer}>
       <div className={styles.gameContainer}>
         <div className={styles.canvasContainer}>
-          <Canvas gameDraw={gameDraw} />
+          <CanvasVideo gameDraw={gameDraw} />
           {loading && (
             <BorderedButton
               customStyle={`${styles.centered} ${styles.startButton}`}
