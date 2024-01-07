@@ -203,22 +203,22 @@ const GameManager = () => {
             // const squares = buildSquares(newLandmarks, squareSide);
 
             // draw squares of the skeleton
-            drawCircles(
-              canvasElement,
-              canvasCtx,
-              skeleton,
-              squareSide / 2,
-              "red"
-            );
+            // drawCircles(
+            //   canvasElement,
+            //   canvasCtx,
+            //   skeleton,
+            //   squareSide / 2,
+            //   "red"
+            // );
 
             // draw squares of the pose (tpose)
-            drawSquares(
-              canvasElement,
-              canvasCtx,
-              gameController.getCurrentPose(),
-              squareSide,
-              "black"
-            );
+            // drawSquares(
+            //   canvasElement,
+            //   canvasCtx,
+            //   gameController.getCurrentPose(),
+            //   squareSide,
+            //   "black"
+            // );
             canvasCtx.restore();
           });
         }
@@ -285,13 +285,13 @@ const GameManager = () => {
               <p className={styles.bottom}>
                 Perform this pose to start the game!
               </p>
-              <button
+              {/* <button
                 onClick={() => setStartInitialCountdown(true)}
                 className={styles.centered}
                 style={{ opacity: 0.8 }}
               >
                 Skip tutorial
-              </button>
+              </button> */}
             </div>
           )}
           {ended && (
@@ -313,12 +313,18 @@ const GameManager = () => {
                   {showLevelText}
                 </div>
               )}
+              {seconds === 0 && !ended && !inTutorial && (
+                <div className={`${styles.centered}`}>
+                  <h1>{!ended ? (passed ? "👍" : "👎") : ""}</h1>
+                </div>
+              )}
+
               <div className={`${styles.hudScore} ${styles.bottomleft}`}>
                 {score}
                 <p>SCORE</p>
               </div>
               <div className={`${styles.hudCheck} ${styles.upperleft}`}>
-                {!ended ? (passed ? "😆" : "😒") : "👑"}
+                {!ended ? (passed ? "😁" : "💀") : "👑"}
               </div>
               {/*<div className={`${styles.hudAccuracy} ${styles.uppercenter}`}>
                 {accuracy}
